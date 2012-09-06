@@ -1,0 +1,63 @@
+1*
+Použili byste kteroukoli z uvedených vět? (U odpovědi NE je možno zašrtnout více možností.)
+  A) Pouze tučňáci žijí na Jižním pólu.
+  B) Přece tučňáci žijí na Jižním pólu.
+  C)Také tučňáci žijí na Jižním pólu.
+  D) Dokonce tučňáci žijí na Jižním pólu.
+**
+!1. ANO, použil/a bych kteroukoli větu.
+2. NE, nepoužil/a bych větu - A
+3. NE, nepoužil/a bych větu - B
+4. NE, nepoužil/a bych větu - C
+5. NE, nepoužil/a bych větu - D
+
+2*
+Přijde Vám některá z následujících vět příznaková, nepřirozená? (U odpovědi ANO je možno zašrtnout více možností.)
+ A) Taky můj manžel nepije alkohol.
+ B) Ani můj manžel nepije alkohol.
+ C) Především můj manžel nepije alkohol.
+ D) Přece můj manžel nepije alkohol.
+**
+!1. NE, všechny věty mi přijdou nepříznakové.
+2. ANO, příznaková mi přijde věta - A
+3. ANO, příznaková mi přijde věta - B
+4. ANO, příznaková mi přijde věta - C
+5. ANO, příznaková mi přijde věta - D
+
+3*
+Kterou z následujících možností chápete jako přirozené doplnění první části souvětí
+  Objem úvěrů nyní v USA roste v meziročním srovnání o 2,7 procenta,... 
+**
+!1. ... v eurozóně dokonce klesá o 0,4 procenta. 
+!2. ... v eurozóně klesá dokonce o 0,4 procenta. 
+
+% Tady se dá napsat cokoliv, poznámka pro autora, respondenti to nikdy neuvidí.
+
+4*
+Jak chápete větu „Dej si ještě koláč!“
+**
+!1. Už jsem měl koláč a mám si ho přidat.
+!2. Už jsem měl jiné pokrmy z nabídky a teď mám ochutnat koláč.
+!+3. Věta znamená obě možnosti
+-1. jako první mě napadla - 1.
+-2. jako první mě napadla - 2.
+-3. nejsem schopen/a posoudit
+
+5*
+Je možné na základě věty
+  „Igor má doma dokonce kobru.“ 
+  vyvodit některé z následujících tvrzení? (Je možné vybrat více odpovědí)
+**
+1. Igor má doma i jiné hady.
+2. Igor má doma i něco jiného.
+3. Igor má doma i jiná zvířata.
+4. Žádné z tvrzení nelze vyvodit.
+
+6*
+Jaký je význam věty: „Pachatelem byl jedině on.“?
+**
+!1. Pachatelem musel být právě tento člověk.
+!2. Pachatelem byl tento člověk sám a nikdo jiný.
+!+3. Věta znamená obě možnosti.
+-1. jako první mě napadla - 1.
+-2. jako první mě napadla - 2.
