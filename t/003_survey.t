@@ -50,6 +50,13 @@ $s = eval { Survey->new('t/003-c.txt') };
 like($@, qr/Impossible incompatibility/, 'Self incompatibility');
 is($s, undef);
 
+$s = eval { Survey->new('t/003-cm.txt') };
+is(ref $s, 'Survey', 'Example loaded');
+is(@{ $s->shake(1) }, 1, 'No incompatibility');
+my $x = eval { $s->shake(2) };
+like($@, qr/Not enough/, 'Not enough compatible questions');
+is($x, undef, 'No questions generated');
+
 # Test real data loading
 
 $s = eval { Survey->new('anketa.txt') };
