@@ -11,7 +11,7 @@ ok(defined $@ and length $@, 'Cannot run without filename');
 is($s, undef);
 
 $s = eval { Survey->new('"') };
-ok(defined $@ and length $@, 'Cannot run without filename');
+ok(defined $@ and length $@, 'File not found');
 is($s, undef);
 
 $s = eval { Survey->new('t/003-d.txt') };
@@ -44,6 +44,10 @@ is($s, undef);
 
 $s = eval { Survey->new('t/003-i.txt') };
 like($@, qr/Invalid line/, 'Invalid line');
+is($s, undef);
+
+$s = eval { Survey->new('t/003-c.txt') };
+like($@, qr/Impossible incompatibility/, 'Self incompatibility');
 is($s, undef);
 
 # Test real data loading

@@ -1,5 +1,7 @@
 package Survey;
 
+use Data::Dumper;
+
 =head1 Survey
 
 =cut
@@ -13,7 +15,6 @@ sub new {
     my $self = {};
     bless $self, $class;
     $self->_load($filename);
-#    use Data::Dumper;die Dumper $self;
     return $self;
 }
 
@@ -33,10 +34,15 @@ sub _load {
     while (<$IN>) {
         next if /^\s*$/ or /^%/;
 
-        if (/^([0-9]+)\*/) {
-            $current = $1;
+        if (/^([0-9]+)\*([\s0-9]*)/) {
+            ($current, my $incompatible) = ($1, $2);
             die "Duplicate $current at $.\n" if exists $self->{$current};
             die "Cannot start question at $.\n" if QUESTION == $mode;
+            if ($incompatible =~ /[0-9]/) {
+                undef $self->{$current}{incompatible}{$_} for split ' ', $incompatible;
+                die "Impossible incompatibility at $.\n"
+                  if exists $self->{$current}{incompatible}{$current};
+            }
             $mode = QUESTION;
 
         } elsif (/^\*\*/) {
@@ -70,6 +76,10 @@ sub _load {
             die "Invalid line $.\n";
         }
     }
+}
+
+sub debug_dump {
+    return Dumper shift;
 }
 
 
