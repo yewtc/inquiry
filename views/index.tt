@@ -1,7 +1,10 @@
 <h1>Anketa</h1>
-<form action="submit">
+<% n = 0 %>
+<form action="submit" onsubmit="return validate()">
   <% FOREACH q IN questions %>
-  <p><% FOREACH qline IN q.1.question %>
+  <div name="p<% q.0 %>" style="border:solid 1pt blue;padding:4pt 4pt 4pt 4pt;">
+  <b><% n = n + 1; get n %>. </b>
+  <% FOREACH qline IN q.1.question %>
        <% qline %>
      <% END %>
 
@@ -28,7 +31,7 @@
          <% i=i+1 %>
          
      <% END %>
-
+     </div>
 
 
   <% END %>
