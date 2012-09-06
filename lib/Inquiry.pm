@@ -1,5 +1,8 @@
 package Inquiry;
 
+use strict;
+use warnings;
+
 use Survey;
 use Dancer ':syntax';
 

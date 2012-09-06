@@ -5,11 +5,31 @@ use List::Util qw/shuffle/;
 
 =head1 Survey
 
+=head2 SYNOPSIS
+
+  my $sur = Survey->($filename);
+  my $questions = $sur->shake($number);
+  print STDERR $sur->debug_dump;
+
+=head2 METHODS
+
+=over 4
+
 =cut
 
 use warnings;
 use strict;
 use utf8;
+
+
+=item new
+
+  my $sur = Survey->new($filename);
+
+Creates a new Survery object, populated from the given file. See L<Syntax> for
+the format of the file.
+
+=cut
 
 sub new {
     my ($class, $filename) = @_;
@@ -19,6 +39,16 @@ sub new {
     $self->_load($filename);
     return $self;
 }
+
+
+=item shake
+
+  my $questions = $sur->shake($number);
+
+Shuffles the questions and returns the first $number of them. Incompatible
+questions will be skipped.
+
+=cut
 
 sub shake {
     my ($self, $max) = @_;
@@ -121,9 +151,44 @@ sub _fix_incompatibility {
 }
 
 
+=item debug_dump
+
+  print STDERR $sur->debug_dump;
+
+Returns a dump (see Data::Dumper) of the given Survey object.
+
+=cut
+
 sub debug_dump {
     return Dumper shift;
 }
 
+
+=back
+
+=head2 SYNTAX
+
+  1* 2
+  This is the first question. It is incompatible with question number 2.
+    An indented line starts a new paragraph.
+  **
+  1. The first answer.
+  2. The second answer. It can be selected together with the first one.
+  !3. The third answer. The exclamation mark means it cannot be combined with any other answer.
+  +4. The fourth answer. If selected, it displays a set of radio buttons.
+  -1. The first radio button. Shown only when the fourth answer is selected.
+  -2. The second radio button. Shown only when the fourth answer is selected.
+
+  % A comment. Comments and emtpy lines are ignored.
+
+  2*
+  The second question. Its incompatibility with question number 1 does not have to be repeated.
+  ...
+
+=head2 AUTHOR
+
+(c) E. Choroba, 2012
+
+=cut
 
 __PACKAGE__
