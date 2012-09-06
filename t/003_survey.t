@@ -7,11 +7,11 @@ use Test::More;
 use Survey;
 
 my $s = eval { Survey->new };
-ok(defined $@ and length $@, 'Cannot run without filename');
+ok((defined $@ and length $@), 'Cannot run without filename');
 is($s, undef);
 
 $s = eval { Survey->new('"') };
-ok(defined $@ and length $@, 'File not found');
+ok((defined $@ and length $@), 'File not found');
 is($s, undef);
 
 $s = eval { Survey->new('t/003-d.txt') };
@@ -56,6 +56,9 @@ is(@{ $s->shake(1) }, 1, 'No incompatibility');
 my $x = eval { $s->shake(2) };
 like($@, qr/Not enough/, 'Not enough compatible questions');
 is($x, undef, 'No questions generated');
+
+$s = Survey->new('t/003-c0.txt');
+ok(exists $s->{2}{incompatible}{1}, 'Incompatibilities fixed');
 
 # Test real data loading
 

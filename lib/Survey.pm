@@ -13,6 +13,7 @@ use utf8;
 
 sub new {
     my ($class, $filename) = @_;
+    die "No filename\n" unless defined $filename;
     my $self = {};
     bless $self, $class;
     $self->_load($filename);
@@ -101,7 +102,23 @@ sub _load {
             die "Invalid line $.\n";
         }
     }
+    $self->_fix_incompatibility;
 }
+
+
+sub _fix_incompatibility {
+    my $self = shift;
+    my %incompatible;
+    for my $question (grep exists $self->{$_}{incompatible}, keys %$self) {
+        undef $incompatible{$question}{$_} for keys %{ $self->{$question}{incompatible} };
+    }
+    for my $q1 (keys %incompatible) {
+        for my $q2 (keys %{ $incompatible{$q1} })  {
+            undef $self->{$q2}{incompatible}{$q1};
+        }
+    }
+}
+
 
 sub debug_dump {
     return Dumper shift;
