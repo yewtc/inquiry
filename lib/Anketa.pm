@@ -2,7 +2,6 @@ package Anketa;
 
 use Survey;
 use Dancer ':syntax';
-use List::Util qw/shuffle/;
 
 use Data::Dumper;
 
@@ -15,9 +14,8 @@ use constant {
 get '/' => sub {
     my $string;
     my $ank = Survey->new('anketa.txt');
-    my @questions = map { [$_, $ank->{$_}] } shuffle keys %$ank;
 
-    template 'index', { questions => [@questions[0 .. QUESTION_COUNT - 1]] };
+    template 'index', { questions => $ank->shake(QUESTION_COUNT) };
 };
 
 get '/submit' => sub {

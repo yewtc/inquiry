@@ -1,4 +1,4 @@
-1*
+1* 2
 Použili byste kteroukoli z uvedených vět? (U odpovědi NE je možno zašrtnout více možností.)
   A) Pouze tučňáci žijí na Jižním pólu.
   B) Přece tučňáci žijí na Jižním pólu.
@@ -11,7 +11,7 @@ Použili byste kteroukoli z uvedených vět? (U odpovědi NE je možno zašrtnou
 4. NE, nepoužil/a bych větu - C
 5. NE, nepoužil/a bych větu - D
 
-2*
+2* 1
 Přijde Vám některá z následujících vět příznaková, nepřirozená? (U odpovědi ANO je možno zašrtnout více možností.)
  A) Taky můj manžel nepije alkohol.
  B) Ani můj manžel nepije alkohol.
@@ -33,7 +33,7 @@ Kterou z následujících možností chápete jako přirozené doplnění první
 
 % Tady se dá napsat cokoliv, poznámka pro autora, respondenti to nikdy neuvidí.
 
-4*
+4* 6
 Jak chápete větu „Dej si ještě koláč!“
 **
 !1. Už jsem měl koláč a mám si ho přidat.
@@ -53,7 +53,7 @@ Je možné na základě věty
 3. Igor má doma i jiná zvířata.
 4. Žádné z tvrzení nelze vyvodit.
 
-6*
+6* 4
 Jaký je význam věty: „Pachatelem byl jedině on.“?
 **
 !1. Pachatelem musel být právě tento člověk.

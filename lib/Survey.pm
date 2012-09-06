@@ -1,6 +1,7 @@
 package Survey;
 
 use Data::Dumper;
+use List::Util qw/shuffle/;
 
 =head1 Survey
 
@@ -17,6 +18,30 @@ sub new {
     $self->_load($filename);
     return $self;
 }
+
+sub shake {
+    my ($self, $max) = @_;
+    my @all_questions = map { [$_, $self->{$_}] } shuffle keys %$self;
+
+    my @questions;
+    my $used = 0;
+    while ($used < $max and @all_questions) {
+        my $question = shift @all_questions;
+        my $ok = 1;
+        my $inc = $question->[1]{incompatible};
+        for my $q (@questions) {
+            undef $ok if exists $inc->{$q->[0]};
+        }
+        if ($ok) {
+            $used++;
+            push @questions, $question;
+        }
+    }
+
+    die "Not enough questions (" . join(',', map $_->[0], @questions) . ")\n" if $used < $max;
+    return \@questions;
+}
+
 
 use constant {
     NONE     => 0,
