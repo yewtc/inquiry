@@ -51,7 +51,7 @@ Je možné na základě věty
 1. Igor má doma i jiné hady.
 2. Igor má doma i něco jiného.
 3. Igor má doma i jiná zvířata.
-4. Žádné z tvrzení nelze vyvodit.
+!4. Žádné z tvrzení nelze vyvodit.
 
 6* 4
 Jaký je význam věty: „Pachatelem byl jedině on.“?
