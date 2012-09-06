@@ -60,6 +60,10 @@ is($x, undef, 'No questions generated');
 $s = Survey->new('t/003-c0.txt');
 ok(exists $s->{2}{incompatible}{1}, 'Incompatibilities fixed');
 
+$s = eval { Survey->new('t/003-ff.txt') };
+like($@, qr/Multiple unfold/, 'Multiple unfold');
+is($s, undef);
+
 # Test real data loading
 
 $s = eval { Survey->new('anketa.txt') };

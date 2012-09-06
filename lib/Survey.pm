@@ -85,6 +85,7 @@ sub _load {
             push @{ $self->{$current}{answer}{text}{normal} },
                 [$_, $alone, $unfold ? 1 : 0];
             if ('+' eq $unfold) {
+                die "Multiple unfold at $.\n" if exists $self->{$current}{answer}{text}{unfold};
                 $mode = UNFOLD;
                 while (<$IN>) {
                     redo LINE unless /^-[0-9]+\.(.*)/;
