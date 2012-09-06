@@ -1,4 +1,4 @@
-package Anketa;
+package Inquiry;
 
 use Survey;
 use Dancer ':syntax';
