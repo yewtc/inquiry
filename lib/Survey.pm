@@ -13,8 +13,6 @@ use List::Util qw/shuffle/;
 
 =head2 METHODS
 
-=over 4
-
 =cut
 
 use warnings;
@@ -164,8 +162,6 @@ sub debug_dump {
     return Dumper shift;
 }
 
-
-=back
 
 =head2 SYNTAX
 

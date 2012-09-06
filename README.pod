@@ -1,0 +1,16 @@
+=head1 NAME
+
+Inquiry
+
+=head1 PURPOSE
+
+Perl application allowing to build web surveys. The survey is built
+randomly from a given set of questions, the questions are
+shuffled. Various features of the questions and answers might be
+specified - see enclosed L<Survey>.
+
+The web interface is built upon L<Dancer>.
+
+=head1 AUTHOR
+
+(c) E. Choroba, 2012
