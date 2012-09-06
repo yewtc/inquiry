@@ -21,6 +21,7 @@ use warnings;
 use strict;
 use utf8;
 
+=encoding utf8
 
 =item new
 
@@ -183,6 +184,7 @@ sub debug_dump {
 
   2*
   The second question. Its incompatibility with question number 1 does not have to be repeated.
+  Text in „Czech quotes“ will be set in italics.
   ...
 
 =head2 AUTHOR
