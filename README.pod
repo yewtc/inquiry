@@ -7,7 +7,7 @@ Inquiry
 Perl application allowing to build web surveys. The survey is built
 randomly from a given set of questions, the questions are
 shuffled. Various features of the questions and answers might be
-specified - see enclosed L<Survey>.
+specified - see enclosed F<lib/Survey.pm>.
 
 The web interface is built upon L<Dancer>.
 

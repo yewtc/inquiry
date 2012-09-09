@@ -3,29 +3,31 @@ package Survey;
 use Data::Dumper;
 use List::Util qw/shuffle/;
 
-=head1 Survey
-
-=head2 SYNOPSIS
-
-  my $sur = Survey->($filename);
-  my $questions = $sur->shake($number);
-  print STDERR $sur->debug_dump;
-
-=head2 METHODS
-
-=cut
-
 use warnings;
 use strict;
 use utf8;
 
 =encoding utf8
 
+=head1 NAME
+
+Survey
+
+=head1 SYNOPSIS
+
+  my $sur = Survey->($filename);
+  my $questions = $sur->shake($number);
+  print STDERR $sur->debug_dump;
+
+=head1 METHODS
+
+=over
+
 =item new
 
   my $sur = Survey->new($filename);
 
-Creates a new Survery object, populated from the given file. See L<Syntax> for
+Creates a new Survery object, populated from the given file. See L</Syntax> for
 the format of the file.
 
 =cut
@@ -168,7 +170,9 @@ sub debug_dump {
 }
 
 
-=head2 SYNTAX
+=back
+
+=head1 SYNTAX
 
   1* 2
   This is the first question. It is incompatible with question number 2.
@@ -188,7 +192,7 @@ sub debug_dump {
   Text in „Czech quotes“ will be set in italics.
   ...
 
-=head2 AUTHOR
+=head1 AUTHOR
 
 (c) E. Choroba, 2012
 
