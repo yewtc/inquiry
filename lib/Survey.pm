@@ -88,6 +88,8 @@ sub _load {
   LINE:
     while (<$IN>) {
         next if /^\s*$/ or /^%/;
+        s/„/<i>/g;
+        s|“|</i>|g;
 
         if (/^([0-9]+)\*([\s0-9]*)/) {
             ($current, my $incompatible) = ($1, $2);
@@ -114,18 +116,21 @@ sub _load {
             push @{ $self->{$current}{answer}{text}{normal} },
                 [$_, $alone, $unfold ? 1 : 0];
             if ('+' eq $unfold) {
-                die "Multiple unfold at $.\n" if exists $self->{$current}{answer}{text}{unfold};
                 $mode = UNFOLD;
+                push @{ $self->{$current}{answer}{text}{unfold} }, [];
+                my $first = 1;
                 while (<$IN>) {
-                    redo LINE unless /^-[0-9]+\.(.*)/;
-                    push @{ $self->{$current}{answer}{text}{unfold} }, $1;
+                    if (not /^-[0-9]+\.(.*)/) {
+                        die "No unfold at $.\n" if $first;
+                        redo LINE;
+                    }
+                    push @{ $self->{$current}{answer}{text}{unfold}[-1] }, $1;
+                    undef $first;
                 }
             }
 
         } elsif (QUESTION == $mode) {
             $_ = "<br>$_" if /^\s/;
-            s/„/<i>/g;
-            s|“|</i>|g;
             push @{ $self->{$current}{question} }, $_;
 
         } else {

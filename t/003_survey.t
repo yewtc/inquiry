@@ -26,10 +26,6 @@ $s = eval { Survey->new('t/003-aa.txt') };
 like($@, qr/Cannot start answer/, 'Answer in answer');
 is($s, undef);
 
-$s = eval { Survey->new('t/003-aaf.txt') };
-like($@, qr/Cannot start answer/, 'Answer in fold');
-is($s, undef);
-
 $s = eval { Survey->new('t/003-a.txt') };
 like($@, qr/Cannot start answer/, 'Answer without question');
 is($s, undef);
@@ -60,9 +56,13 @@ is($x, undef, 'No questions generated');
 $s = Survey->new('t/003-c0.txt');
 ok(exists $s->{2}{incompatible}{1}, 'Incompatibilities fixed');
 
-$s = eval { Survey->new('t/003-ff.txt') };
-like($@, qr/Multiple unfold/, 'Multiple unfold');
+$s = eval { Survey->new('t/003-fn.txt') };
+like($@, qr/No unfold/, 'No unfold');
 is($s, undef);
+
+$s = eval { Survey->new('t/003-fm.txt') };
+is(ref $s, 'Survey', 'Example loaded');
+is(@{ $s->{1}{answer}{text}{unfold} }, 2, 'Multiple unfold');
 
 # Test real data loading
 

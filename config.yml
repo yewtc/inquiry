@@ -26,4 +26,5 @@ engines:
     encoding:  'utf8'
     start_tag: '<%'
     end_tag:   '%>'
+    EVAL_PERL: 1
 

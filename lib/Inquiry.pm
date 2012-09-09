@@ -15,9 +15,7 @@ use constant {
 };
 
 get '/' => sub {
-    my $string;
     my $ank = Survey->new('anketa.txt');
-
     template 'index', { questions => $ank->shake(QUESTION_COUNT) };
 };
 

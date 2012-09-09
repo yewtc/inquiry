@@ -3,26 +3,32 @@
 <form action="submit" onsubmit="return validate()">
   <% FOREACH q IN questions %>
   <div name="p<% q.0 %>" style="padding:4pt 4pt 24pt 4pt;">
-  <b><% n = n + 1; get n %>. </b>
-  <% FOREACH qline IN q.1.question %>
-       <% qline %>
+     <b><% n = n + 1; get n %>. </b>
+     <% FOREACH qline IN q.1.question %>
+        <% qline %>
      <% END %>
 
      <% i=1 %>
      <% FOREACH text IN q.1.answer.text.normal %>
          <br><input type="checkbox"
-             name="q<% IF text.1 %>a<% end %><% q.0 %>-<% i %>"
-             onchange="checking('<% UNLESS text.1 %>qa<% end %><% q.0 %>',<% i %>, <% text.2 %>)">
+             name="q<% IF text.1 %>a<% END %>n<% q.0 %>-<% i %>"
+             onchange="checking('<% UNLESS text.1 %>a<% END %>n<% q.0 %>',<% i %>, <% text.2 %>)">
          <% text.0 %>
 
          <% IF text.2 %>
-             <div style="padding-top:0;margin-top:0" hidden=hidden name="fold<% q.0 %>">
+             <div style="padding-top:0;margin-top:0" hidden=hidden
+                  name="f<% IF text.1 %>a<% END %>n<% q.0 %>-<% i%>">
              <% j=1 %>
-             <% FOREACH fold IN q.1.answer.text.unfold %>
+             <% FOREACH fold IN q.1.answer.text.unfold.0 %>
                  &nbsp; &nbsp; &nbsp;
                  <input type="radio"
-                 name="r<% q.0 %>" value="<% j %>"><% fold %><br>
+                 name="r<% q.0 %>-<% i %>" value="<% j %>"><% fold %><br>
                  <% j=j+1 %>
+             <% END %>
+             <% RAWPERL %>
+                 my $fold = $stash->get('q.1.answer.text.unfold');
+                 shift $fold;
+                 $stash->set('q.1.answer.text.unfold', $fold);
              <% END %>
              </div>
          <% END %>

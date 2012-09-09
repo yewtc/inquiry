@@ -2,15 +2,28 @@ function checking (q, i, u) {
     $('input[name*="' + q + '-"]')
         .not('input[name*="-' + i + '"]')
         .removeAttr("checked");
-    div = $('div[name="fold' + q + '"]');
-    if (u && $(div).attr('hidden')) {
-        $(div).removeAttr('hidden');
-        $(div).find('input').first().attr('checked', 'checked');
-    } else {
-        $(div).attr('hidden', 'hidden');
-        $(div).find('input').removeAttr('checked');
+
+        var qn = q;
+        if (qn.substr(0,1) == 'a') {
+            qn = qn.substr(1);
+        }
+
+    if (u) {
+        div = $('div[name*="' + qn + '-' + i + '"]');
+        if ($(div).attr('hidden')) {
+            $(div).removeAttr('hidden');
+            $(div).find('input').first().attr('checked', 'checked');
+        } else {
+            $(div).attr('hidden', 'hidden');
+            $(div).find('input').removeAttr('checked');
+        }
     }
+
+    var others = $('div[name*="a' + qn + '-"]').not('[name*="-' + i + '"]');
+    others.attr('hidden', 'hidden');
+    others.find('input').removeAttr('checked');
 }
+
 
 function validate () {
     var ps = $('div[name^="p"]');
