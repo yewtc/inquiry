@@ -4,6 +4,7 @@ use strict;
 use warnings;
 
 use Survey;
+use Results;
 use Dancer ':syntax';
 
 use Data::Dumper;
@@ -15,12 +16,14 @@ use constant {
 };
 
 get '/' => sub {
-    my $ank = Survey->new('anketa.txt');
-    template 'index', { questions => $ank->shake(QUESTION_COUNT) };
+    my $survey = Survey->new('anketa.txt');
+    Results->new->init(scalar keys %{$survey});
+    template 'index', { questions => $survey->shake(QUESTION_COUNT) };
 };
 
 get '/submit' => sub {
-    return '<pre>' . Dumper({params()}) . '</pre>';
+    my $results = Results->new;
+    $results->save(params());
 };
 
 true;
