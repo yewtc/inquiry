@@ -27,7 +27,7 @@
              <% END %>
              <% RAWPERL %>
                  my $fold = $stash->get('q.1.answer.text.unfold');
-                 shift $fold;
+                 shift @$fold;
                  $stash->set('q.1.answer.text.unfold', $fold);
              <% END %>
              </div>
