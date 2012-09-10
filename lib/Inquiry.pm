@@ -13,16 +13,20 @@ our $VERSION = '0.1';
 
 use constant {
     QUESTION_COUNT => 4,
+    DB_FILE => '1.db',
 };
 
 get '/' => sub {
     my $survey = Survey->new('anketa.txt');
-    Results->new->init(scalar keys %{$survey});
+
+    # Now we know the number of questions:
+    Results->new(DB_FILE)->init(scalar keys %{$survey});
+
     template 'index', { questions => $survey->shake(QUESTION_COUNT) };
 };
 
 get '/submit' => sub {
-    my $results = Results->new;
+    my $results = Results->new(DB_FILE);
     $results->save(params());
 };
 

@@ -26,16 +26,16 @@ use DBI;
 
 =item new
 
-  my $results = Results->new;
+  my $results = Results->new($filename);
 
-Returns a new Results object.
+Returns a new Results object, connects to the database in $filename.
 
 =cut
 
 sub new {
-    my $class = shift;
+    my ($class, $filename) = @_;
     my $self = {};
-    $self->{db} = DBI->connect('dbi:SQLite:dbname=1.db', q(), q());
+    $self->{db} = DBI->connect("dbi:SQLite:dbname=$filename", q(), q());
     return bless $self, $class;
 }
 
@@ -113,5 +113,7 @@ sub _sort_multiple_answers {
 =head1 AUTHOR
 
 (c) E. Choroba, 2012
+
+=cut
 
 __PACKAGE__
