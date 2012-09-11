@@ -31,18 +31,38 @@ any [qw/get post/] => '/' => sub {
         session shaken => init()->shake(QUESTION_COUNT);
     }
     if (session('current')) {
-#        die Dumper {params()};
         session current => 1 + session('current') if 'Další' eq (param('next') // q());
     } else {
         session current => 1;
     }
+
+    for my $param (grep /^(?:qa?n|r)[0-9]+-[0-9]+$/, params()) {
+        session $param => param($param);
+    }
+
     template 'by_one', {current => session('current'),
                         shaken  => session('shaken'),
                         max     => QUESTION_COUNT};
 };
 
 
+get '/again' => sub {
+    session->destroy;
+    forward '/';
+};
+
+
 post '/submit_one' => sub {
+    if (session('current')) {
+        my $results = Results->new(DB_FILE, request->address);
+        $results->save(params(),
+                       map { $_ => session($_) }
+                           grep /^(?:qa?n|r)[0-9]+-[0-9]+$/,
+                           keys %{ session() });
+        session->destroy;
+        forward '/thanks';
+    }
+    send_error 'Cannot submit';
 };
 
 
@@ -52,8 +72,18 @@ get '/all' => sub {
 
 
 get '/submit' => sub {
-    my $results = Results->new(DB_FILE, request->address);
-    $results->save(params());
+    if (params()) {
+        my $results = Results->new(DB_FILE, request->address);
+        $results->save(params());
+        session->destroy;
+        forward '/thanks';
+    }
+    send_error 'Cannot submit';
+};
+
+
+any [qw/post get/] => '/thanks' => sub {
+    template 'thanks';
 };
 
 true;

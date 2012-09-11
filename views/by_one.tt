@@ -40,13 +40,6 @@
      </div>
   <% END %>
   <% END %>
-<pre>
-<% PERL %>
-use Data::Dumper;
-print Dumper(Dancer::params());
-<% END %>
-</pre>
-
 
 <p>
 <%IF current >= max %>
@@ -54,5 +47,5 @@ print Dumper(Dancer::params());
 <% ELSE %>
      <input name="next" type="submit" value="Další">
 <% END %>
-<input type="submit" name="again" value="Začít znovu">
+<input type="button" name="again" value="Začít znovu" onclick="window.location='/again'">
 </form>
