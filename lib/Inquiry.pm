@@ -13,7 +13,7 @@ our $VERSION = '0.1';
 
 use constant {
     QUESTION_COUNT => 4,
-    DB_FILE => '1.db',
+    DB_FILE => 'inquiry.db',
 };
 
 get '/' => sub {
