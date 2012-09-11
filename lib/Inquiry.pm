@@ -26,7 +26,7 @@ get '/' => sub {
 };
 
 get '/submit' => sub {
-    my $results = Results->new(DB_FILE);
+    my $results = Results->new(DB_FILE, request->address);
     $results->save(params());
 };
 

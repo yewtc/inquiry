@@ -6,7 +6,7 @@ Results
 
 =head1 SYNOPSIS
 
-  my $results = Results->new();
+  my $results = Results->new($filename, $ip);
   my $results->init($count_answers);
   my $results->save(%params);
 
@@ -26,16 +26,18 @@ use DBI;
 
 =item new
 
-  my $results = Results->new($filename);
+  my $results = Results->new($filename, $ip);
 
-Returns a new Results object, connects to the database in $filename.
+Returns a new Results object, connects to the database in
+$filename. $ip is used to generate unique id.
 
 =cut
 
 sub new {
-    my ($class, $filename) = @_;
+    my ($class, $filename, $ip) = @_;
     my $self = {};
     $self->{db} = DBI->connect("dbi:SQLite:dbname=$filename", q(), q());
+    $self->{id} = join '-', $ip // '0.0.0.0', time, rand 1e14;
     return bless $self, $class;
 }
 
@@ -53,7 +55,8 @@ sub init {
     my ($self, $num) = @_;
     unless ($self->{db}->tables(undef, '%', 'answers', 'TABLE')) {
         my $questions = join ',', map "q$_ varchar(20)", 1 .. $num;
-        $self->{db}->do("create table answers (id int, $questions)");
+                                                          # 45 ip + 15 rand + 15 time
+        $self->{db}->do("create table answers (connection varchar(76), id int, $questions)");
     }
 }
 
@@ -90,12 +93,13 @@ sub save {
         }
     }
 
-    my $insert = $self->{db}->prepare('insert into answers('
+    my $insert = $self->{db}->prepare('insert into answers(connection,'
                                       . join(', ', map "q$_", keys %results)
-                                      . ') values ('
+                                      . ') values (?, '
                                       . join(', ', ('?') x keys %results)
                                       . ')');
-    $insert->execute(map join(',', sort _sort_multiple_answers @$_), values %results);
+    $insert->execute($self->{id},
+                     map join(',', sort _sort_multiple_answers @$_), values %results);
     $insert->finish;
 }
 
