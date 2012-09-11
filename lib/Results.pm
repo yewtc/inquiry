@@ -62,7 +62,7 @@ sub init {
     unless ($self->{db}->tables(undef, '%', 'answers', 'TABLE')) {
         my $questions = join ',', map "q$_ varchar(20)", 1 .. $num;
                                                           # 45 ip + 15 rand + 15 time
-        $self->{db}->do("create table answers (connection varchar(76) primary key, id int, $questions)");
+        $self->{db}->do("create table answers (connection varchar(76) primary key, $questions)");
     }
 }
 

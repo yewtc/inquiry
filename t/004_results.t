@@ -21,7 +21,7 @@ $r->save(qw/qan1-2 on
            /);
 
 is_deeply($r->retrieve,
-          { $r->{id} => [undef, 2, '2,3', '1:2', '1:1,2:2,3']},
+          { $r->{id} => [2, '2,3', '1:2', '1:1,2:2,3']},
           'all values stored');
 
 unlink 'test.db';
