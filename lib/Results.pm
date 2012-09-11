@@ -123,7 +123,7 @@ sub _sort_multiple_answers {
 
   my %results = $results->retrieve;
 
-Returns a hash populated from the result database. The keys are the
+Returns a hashref populated from the result database. The keys are the
 connection id's, the values are arrays of answers.
 
 =cut
