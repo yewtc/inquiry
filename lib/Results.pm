@@ -37,10 +37,16 @@ sub new {
     my ($class, $filename, $ip) = @_;
     my $self = {};
     $self->{db} = DBI->connect("dbi:SQLite:dbname=$filename", q(), q());
-    $self->{id} = join '-', $ip // '0.0.0.0', time, rand 1e14;
+    $self->{id} = _generate_id($ip);
     return bless $self, $class;
 }
 
+
+# Generates id from the IP
+sub _generate_id {
+    my $ip = shift;
+    join '-', $ip // '0.0.0.0', time, rand 1e14;
+}
 
 =item init
 
@@ -56,7 +62,7 @@ sub init {
     unless ($self->{db}->tables(undef, '%', 'answers', 'TABLE')) {
         my $questions = join ',', map "q$_ varchar(20)", 1 .. $num;
                                                           # 45 ip + 15 rand + 15 time
-        $self->{db}->do("create table answers (connection varchar(76), id int, $questions)");
+        $self->{db}->do("create table answers (connection varchar(76) primary key, id int, $questions)");
     }
 }
 
@@ -111,6 +117,24 @@ sub _sort_multiple_answers {
     $b0 //= $b;
     $a0 <=> $b0 or $a1 <=> $b1;
 }
+
+
+=item retrieve
+
+  my %results = $results->retrieve;
+
+Returns a hash populated from the result database. The keys are the
+connection id's, the values are arrays of answers.
+
+=cut
+
+sub retrieve {
+    my $self = shift;
+    my $select = $self->{db}->prepare('select * from answers');
+    $select->execute;
+    return { map { $_->[0] => [ @{ $_ }[1 .. $#{$_}] ] } @{ $select->fetchall_arrayref } };
+}
+
 
 =back
 
