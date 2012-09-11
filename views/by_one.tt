@@ -1,0 +1,58 @@
+<h1>Anketa</h1>
+<p>
+<form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>" onsubmit="return validate()">
+<% n = 0 %>
+  <% FOREACH q IN shaken %>
+  <% n=n+1 %>
+  <% IF n == current %>
+  <div name="p<% q.0 %>" style="padding:4pt 4pt 24pt 4pt;">
+     <b><% n %> / <% max %>: </b>
+     <% FOREACH qline IN q.1.question %>
+        <% qline %>
+     <% END %>
+
+     <% i=1 %>
+     <% FOREACH text IN q.1.answer.text.normal %>
+         <br><input type="checkbox"
+             name="q<% IF text.1 %>a<% END %>n<% q.0 %>-<% i %>"
+             onchange="checking('<% UNLESS text.1 %>a<% END %>n<% q.0 %>',<% i %>, <% text.2 %>)">
+         <% text.0 %>
+
+         <% IF text.2 %>
+             <div style="padding-top:0;margin-top:0" hidden=hidden
+                  name="f<% IF text.1 %>a<% END %>n<% q.0 %>-<% i%>">
+             <% j=1 %>
+             <% FOREACH fold IN q.1.answer.text.unfold.0 %>
+                 &nbsp; &nbsp; &nbsp;
+                 <input type="radio"
+                 name="r<% q.0 %>-<% i %>" value="<% j %>"><% fold %><br>
+                 <% j=j+1 %>
+             <% END %>
+             <% RAWPERL %>
+                 my $fold = $stash->get('q.1.answer.text.unfold');
+                 shift @$fold;
+                 $stash->set('q.1.answer.text.unfold', $fold);
+             <% END %>
+             </div>
+         <% END %>
+         <% i=i+1 %>
+     <% END %>
+     </div>
+  <% END %>
+  <% END %>
+<pre>
+<% PERL %>
+use Data::Dumper;
+print Dumper(Dancer::params());
+<% END %>
+</pre>
+
+
+<p>
+<%IF current >= max %>
+     <input type="submit" value="Hotovo">
+<% ELSE %>
+     <input name="next" type="submit" value="Další">
+<% END %>
+<input type="submit" name="again" value="Začít znovu">
+</form>

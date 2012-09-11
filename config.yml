@@ -28,3 +28,5 @@ engines:
     end_tag:   '%>'
     EVAL_PERL: 1
 
+# Session: simple | cookie | storable | YAML
+session: "simple"

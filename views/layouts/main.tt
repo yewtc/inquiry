@@ -14,7 +14,7 @@
 
 <script type="text/javascript" src="javascripts/scripts.js"></script>
 </head>
-<body>
+<body onload="noBack();" onpageshow="if (event.persisted) noBack();" onunload="">
 <% content %>
 <div id="footer">
 Powered by <a href="http://perldancer.org/">Dancer</a> <% dancer_version %>
