@@ -93,7 +93,7 @@ sub _load {
         s/„/<i>/g;
         s|“|</i>|g;
 
-        if (/^([0-9]+)\*([\s0-9]*)/) {
+        if (/^([0-9]+)\*([\s0-9]*)$/) {
             ($current, my $incompatible) = ($1, $2);
             die "Duplicate $current at $.\n" if exists $self->{$current};
             die "Cannot start question at $.\n" if QUESTION == $mode;
@@ -104,17 +104,17 @@ sub _load {
             }
             $mode = QUESTION;
 
-        } elsif (/^\*\*/) {
+        } elsif (/^[0-9]*\*\*/) {
             die "Cannot start answer at $.\n" if QUESTION != $mode;
             $mode = ANSWER;
 
-        } elsif (/^(!?)(\+?)([0-9]+)\./) {
+        } elsif (/^\s*(!?)(\+?)([0-9]+)\./) {
             my ($alone, $unfold, $num) = ($1, $2, $3);
             die "Cannot put answers at $.\n"
                 if NONE == $mode
                    || QUESTION == $mode
                    and $alone || $unfold;
-            s/^[!+]+//;
+            s/^\s*[!+]+//;
             push @{ $self->{$current}{answer}{text}{normal} },
                 [$_, $alone, $unfold ? 1 : 0];
             if ('+' eq $unfold) {
@@ -122,7 +122,7 @@ sub _load {
                 push @{ $self->{$current}{answer}{text}{unfold} }, [];
                 my $first = 1;
                 while (<$IN>) {
-                    if (not /^-[0-9]+\.(.*)/) {
+                    if (not /^\s*!?-(?:[0-9]+\.)?(.*)/) {
                         die "No unfold at $.\n" if $first;
                         redo LINE;
                     }
