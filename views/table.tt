@@ -1,0 +1,14 @@
+<h1>Výsledky</h1>
+<% n = 0 %>
+<table border=1>
+  <tr>
+    <% FOREACH _r in results.0 %>
+      <td><% n = n + 1 %><% n %>*
+    <% END %>
+<% FOREACH row IN results %>
+  <tr>
+  <% FOREACH column IN row %>
+    <td><% column %>
+  <% END %>
+<% END %>
+</table>

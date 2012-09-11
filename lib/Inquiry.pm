@@ -86,4 +86,10 @@ any [qw/post get/] => '/thanks' => sub {
     template 'thanks';
 };
 
+
+get '/table' => sub {
+    template 'table', { results => [ values %{ Results->new(DB_FILE)->retrieve } ] };
+};
+
+
 true;
