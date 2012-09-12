@@ -37,3 +37,6 @@ function validate () {
     }
     return true;
 }
+
+window.history.forward();
+function noBack() { window.history.forward(); }

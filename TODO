@@ -1,0 +1,13 @@
+* simplify javascript
+
+- IE 8 does not understand JQuery :-(
+
+implement the logic in simple JS:
+
+|     | Check        | Uncheck |
+|-----+--------------+---------|
+| 0   | -A           | 0       |
+| A   | -*;F-U       | 0       |
+| U   | -A;USelf     | Fself   |
+| A+U | -*;F-U;Uself | Fself   |
+

@@ -1,9 +1,12 @@
 <h1>Anketa</h1>
+<p>
+<form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>" onsubmit="return validate()">
 <% n = 0 %>
-<form action="submit" onsubmit="return validate()">
-  <% FOREACH q IN questions %>
+  <% FOREACH q IN shaken %>
+  <% n=n+1 %>
+  <% IF n == current %>
   <div name="p<% q.0 %>" style="padding:4pt 4pt 24pt 4pt;">
-     <b><% n = n + 1; get n %>. </b>
+     <b><% n %> / <% max %>: </b>
      <% FOREACH qline IN q.1.question %>
         <% qline %>
      <% END %>
@@ -32,15 +35,17 @@
              <% END %>
              </div>
          <% END %>
-
-
          <% i=i+1 %>
-         
      <% END %>
      </div>
-
-
   <% END %>
+  <% END %>
+
 <p>
-<input type="submit" value="Hotovo">
+<%IF current >= max %>
+     <input type="submit" value="Hotovo">
+<% ELSE %>
+     <input name="next" type="submit" value="Další">
+<% END %>
+<input type="button" name="again" value="Začít znovu" onclick="window.location='/again'">
 </form>
