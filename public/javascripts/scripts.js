@@ -9,7 +9,7 @@ function checking (q, i, u) {
         }
 
     if (u) {
-        div = $('div[name*="' + qn + '-' + i + '"]');
+        var div = $('div[name*="' + qn + '-' + i + '"]');
         if ($(div).attr('hidden')) {
             $(div).removeAttr('hidden');
             $(div).find('input').first().attr('checked', 'checked');
