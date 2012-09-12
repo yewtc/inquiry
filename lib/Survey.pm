@@ -178,11 +178,11 @@ sub debug_dump {
   This is the first question. It is incompatible with question number 2.
     An indented line starts a new paragraph.
   **
-  1. The first answer.
+  1. The first answer. (Answers can be indented).
   2. The second answer. It can be selected together with the first one.
   !3. The third answer. The exclamation mark means it cannot be combined with any other answer.
   +4. The fourth answer. If selected, it displays a set of radio buttons.
-  -1. The first radio button. Shown only when the fourth answer is selected.
+  -1. The first radio button. Shown only when the fourth answer is selected. The numbering is optional.
   -2. The second radio button. Shown only when the fourth answer is selected.
 
   % A comment. Comments and emtpy lines are ignored.
@@ -190,6 +190,8 @@ sub debug_dump {
   2*
   The second question. Its incompatibility with question number 1 does not have to be repeated.
   Text in „Czech quotes“ will be set in italics.
+  **
+    !+1. This answer is incompatible with the others (!). When checked, it displays a set of radio buttons (+).
   ...
 
 =head1 AUTHOR
