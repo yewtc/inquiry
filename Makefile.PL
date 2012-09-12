@@ -4,11 +4,11 @@ use ExtUtils::MakeMaker;
 
 WriteMakefile(
     NAME                => 'Inquiry',
-    AUTHOR              => q{YOUR NAME <youremail@example.com>},
+    AUTHOR              => q{E. Choroba <choroba@email.cz>},
     VERSION_FROM        => 'lib/Inquiry.pm',
-    ABSTRACT            => 'YOUR APPLICATION ABSTRACT',
+    ABSTRACT            => 'Tool to create online surveys.',
     ($ExtUtils::MakeMaker::VERSION >= 6.3002
-      ? ('LICENSE'=> 'perl')
+      ? (LICENSE => 'perl')
       : ()),
     PL_FILES            => {},
     PREREQ_PM => {

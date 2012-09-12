@@ -8,7 +8,7 @@ use Dancer ':syntax';
 
 use Data::Dumper;
 
-our $VERSION = '0.1';
+our $VERSION = '0.2';
 
 use constant {
     QUESTION_COUNT => 4,
