@@ -10,17 +10,22 @@ function checking (q, i, u) {
 
     if (u) {
         var div = $('div[name*="' + qn + '-' + i + '"]');
-        if ($(div).attr('hidden')) {
-            $(div).removeAttr('hidden');
+        if ($(div).attr('disabled')) {
+            $(div).show();
+            $(div).removeAttr('disabled');
+            $(div).find('input').removeAttr('disabled');
             $(div).find('input').first().attr('checked', 'checked');
         } else {
-            $(div).attr('hidden', 'hidden');
+            $(div).hide();
+            $(div).attr('disabled', 'disabled');
+            $(div).find('input').attr('disabled', 'disabled');
             $(div).find('input').removeAttr('checked');
         }
     }
 
     var others = $('div[name*="a' + qn + '-"]').not('[name*="-' + i + '"]');
-    others.attr('hidden', 'hidden');
+    others.hide();
+    others.attr('disabled', 'disabled');
     others.find('input').removeAttr('checked');
 }
 
