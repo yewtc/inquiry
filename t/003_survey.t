@@ -73,7 +73,7 @@ is($s, undef, "No obj: $n");
 
 $s = eval { Survey->new('t/003-fm.txt') };
 is(ref $s, 'Survey', 'Example loaded');
-is(@{ $s->{1}{answer}{text}{unfold} }, 2, 'Multiple unfold');
+is(@{ $s->{1}{unfold} }, 2, 'Multiple unfold');
 
 # Test real data loading
 

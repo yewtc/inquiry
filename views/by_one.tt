@@ -12,7 +12,7 @@
      <% END %>
 
      <% i=1 %>
-     <% FOREACH text IN q.1.answer.text.normal %>
+     <% FOREACH text IN q.1.normal %>
          <br><input type="checkbox"
              name="q<% IF text.1 %>a<% END %>n<% q.0 %>-<% i %>"
              onclick="checking('<% UNLESS text.1 %>a<% END %>n<% q.0 %>',<% i %>, <% text.2 %>)">
@@ -22,16 +22,16 @@
              <div style="padding-top:0;margin-top:0;display:none;" disabled="disabled"
                   name="f<% IF text.1 %>a<% END %>n<% q.0 %>-<% i%>">
              <% j=1 %>
-             <% FOREACH fold IN q.1.answer.text.unfold.0 %>
+             <% FOREACH fold IN q.1.unfold.0 %>
                  &nbsp; &nbsp; &nbsp;
                  <input type="radio" disabled="disabled"
                  name="r<% q.0 %>-<% i %>" value="<% j %>"><% fold %><br>
                  <% j=j+1 %>
              <% END %>
              <% RAWPERL %>
-                 my $fold = $stash->get('q.1.answer.text.unfold');
+                 my $fold = $stash->get('q.1.unfold');
                  shift @$fold;
-                 $stash->set('q.1.answer.text.unfold', $fold);
+                 $stash->set('q.1.unfold', $fold);
              <% END %>
              </div>
          <% END %>

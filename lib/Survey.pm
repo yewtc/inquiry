@@ -115,18 +115,18 @@ sub _load {
                    || QUESTION == $mode
                    and $alone || $unfold;
             s/^\s*[!+]+//;
-            push @{ $self->{$current}{answer}{text}{normal} },
+            push @{ $self->{$current}{normal} },
                 [$_, $alone, $unfold ? 1 : 0];
             if ('+' eq $unfold) {
                 $mode = UNFOLD;
-                push @{ $self->{$current}{answer}{text}{unfold} }, [];
+                push @{ $self->{$current}{unfold} }, [];
                 my $first = 1;
                 while (<$IN>) {
                     if (not /^\s*!?-(?:[0-9]+\.)?(.*)/) {
                         die "No unfold at $.\n" if $first;
                         redo LINE;
                     }
-                    push @{ $self->{$current}{answer}{text}{unfold}[-1] }, $1;
+                    push @{ $self->{$current}{unfold}[-1] }, $1;
                     undef $first;
                 }
             }
