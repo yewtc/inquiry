@@ -107,6 +107,7 @@ sub save {
     $insert->execute($self->{id},
                      map join(',', sort _sort_multiple_answers @$_), values %results);
     $insert->finish;
+    $self->{db}->disconnect;
 }
 
 

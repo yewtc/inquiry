@@ -14,14 +14,16 @@ our $VERSION = '0.2';
 
 use constant {
     QUESTION_COUNT => 4,
-    DB_FILE => 'inquiry.db',
+    DB_FILE => '/home/stepanek/bara/inquiry/inquiry.db',
 };
 
 sub init {
     my $survey = Survey->new('anketa.txt');
 
     # Now we know the number of questions:
-    Results->new(DB_FILE)->init(scalar keys %{$survey});
+    my $results = Results->new(DB_FILE);
+    $results->init(scalar keys %{$survey});
+    $results->{db}->disconnect;
     return $survey;
 }
 
