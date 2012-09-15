@@ -19,7 +19,7 @@
          <% text.0 %>
 
          <% IF text.2 %>
-             <div style="padding-top:0;margin-top:0;display:none;"
+             <div style="padding-top:0;margin-top:0;display:none;" disabled="disabled"
                   name="f<% IF text.1 %>a<% END %>n<% q.0 %>-<% i%>">
              <% j=1 %>
              <% FOREACH fold IN q.1.answer.text.unfold.0 %>

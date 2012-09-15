@@ -23,7 +23,7 @@ function checking (q, i, u) {
         }
     }
 
-    var others = $('div[name*="a' + qn + '-"]').not('[name*="-' + i + '"]');
+    var others = $('div[name*="' + q + '-"]').not('[name*="-' + i + '"]');
     others.hide();
     others.attr('disabled', 'disabled');
     others.find('input').removeAttr('checked');

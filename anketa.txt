@@ -61,3 +61,16 @@ Jaký je význam věty: „Pachatelem byl jedině on.“?
 !+3. Věta znamená obě možnosti.
 -1. jako první mě napadla - 1.
 -2. jako první mě napadla - 2.
+
+7*
+Question with nonalone unfolds.
+**
+1. Answer one.
+2. Answer two.
+!3. Non compatible answer.
++4. Answer four with unfolds:
+-1. The first one.
+-2. The second one.
+!+5. Incompatible answer five with unfolds:
+-1. The number one.
+-2. The number two.
