@@ -14,7 +14,7 @@ our $VERSION = '0.2';
 
 use constant {
     QUESTION_COUNT => 4,
-    DB_FILE => '/home/stepanek/bara/inquiry/inquiry.db',
+    DB_FILE => $ENV{HOME} . '/bara/inquiry/inquiry.db',
 };
 
 sub init {
