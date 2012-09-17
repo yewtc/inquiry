@@ -19,16 +19,9 @@ use constant {
 
 my $survey = Survey->new('anketa.txt');
 
-sub init {
-    my $results = Results->new(DB_FILE);
-    $results->init($survey->count);
-    return $survey;
-}
-
-
 any [qw/get post/] => '/' => sub {
     unless (session('shaken')) {
-        session shaken => init()->shake(QUESTION_COUNT);
+        session shaken => $survey->shake(QUESTION_COUNT);
     }
     if (session('current')) {
         session current => 1 + session('current') if 'Další' eq (param('next') // q());
@@ -67,7 +60,7 @@ post '/submit_one' => sub {
 
 
 get '/all' => sub {
-    template 'index', { questions => init()->shake(QUESTION_COUNT) };
+    template 'index', { questions => $survey->shake(QUESTION_COUNT) };
 };
 
 
