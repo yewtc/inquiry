@@ -59,6 +59,7 @@ is($s, undef, "No obj: $n");
 $s = eval { Survey->new('t/003-cm.txt') };
 is(ref $s, 'Survey', 'Example loaded');
 is(@{ $s->shake(1) }, 1, 'No incompatibility');
+is($s->count, 2, 'Number of questions');
 my $x = eval { $s->shake(2) };
 like($@, qr/Not enough/, 'Not enough compatible questions');
 is($x, undef, 'No questions generated');

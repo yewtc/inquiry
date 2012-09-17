@@ -108,7 +108,6 @@ sub save {
     $insert->execute($self->{id},
                      map join(',', sort _sort_multiple_answers @$_), values %results);
     $insert->finish;
-    $self->{db}->disconnect;
 }
 
 
@@ -136,6 +135,12 @@ sub retrieve {
     $select->execute;
     return { map { $_->[0] => [ @{ $_ }[1 .. $#{$_}] ] } @{ $select->fetchall_arrayref } };
 }
+
+
+sub DESTROY {
+    shift->{db}->disconnect;
+}
+
 
 
 =back

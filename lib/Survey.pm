@@ -15,7 +15,8 @@ Survey
 
 =head1 SYNOPSIS
 
-  my $sur = Survey->($filename);
+  my $sur       = Survey->($filename);
+  my $max_num   = $sur->count;
   my $questions = $sur->shake($number);
   print STDERR $sur->debug_dump;
 
@@ -39,6 +40,19 @@ sub new {
     bless $self, $class;
     $self->_load($filename);
     return $self;
+}
+
+
+=item count
+
+  my $max_num = $sur->count;
+
+Returns the number of questions in the full survery.
+
+=cut
+
+sub count {
+    return scalar keys %{+shift};
 }
 
 

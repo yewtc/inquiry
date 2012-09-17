@@ -14,16 +14,14 @@ our $VERSION = '0.2';
 
 use constant {
     QUESTION_COUNT => 4,
-    DB_FILE => $ENV{HOME} . '/bara/inquiry/inquiry.db',
+    DB_FILE => 'inquiry.db',
 };
 
-sub init {
-    my $survey = Survey->new('anketa.txt');
+my $survey = Survey->new('anketa.txt');
 
-    # Now we know the number of questions:
+sub init {
     my $results = Results->new(DB_FILE);
-    $results->init(scalar keys %{$survey});
-    $results->{db}->disconnect;
+    $results->init($survey->count);
     return $survey;
 }
 
@@ -90,7 +88,9 @@ any [qw/post get/] => '/thanks' => sub {
 
 
 get '/table' => sub {
-    template 'table', { results => [ values %{ Results->new(DB_FILE)->retrieve } ] };
+    my $results = Results->new(DB_FILE);
+    $results->init($survey->count);
+    template 'table', { results => [ values %{ $results->retrieve } ] };
 };
 
 
