@@ -48,6 +48,7 @@ get '/again' => sub {
 post '/submit_one' => sub {
     if (session('current')) {
         my $results = Results->new(DB_FILE, request->address);
+        $results->init($survey->count);
         $results->save(params(),
                        map { $_ => session($_) }
                            grep /^(?:qa?n|r)[0-9]+-[0-9]+$/,
@@ -67,6 +68,7 @@ get '/all' => sub {
 get '/submit' => sub {
     if (params()) {
         my $results = Results->new(DB_FILE, request->address);
+        $results->init($survey->count);
         $results->save(params());
         session->destroy;
         forward '/thanks';
