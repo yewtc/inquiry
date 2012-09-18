@@ -64,6 +64,7 @@ sub init {
         my $questions = join ',', map "q$_ varchar(20)", 1 .. $num;
                                                           # 45 ip + 15 rand + 15 time
         $self->{db}->do("create table answers (connection varchar(76) primary key, $questions)");
+        $self->{db}->commit;
     }
 }
 
@@ -108,6 +109,7 @@ sub save {
     $insert->execute($self->{id},
                      map join(',', sort _sort_multiple_answers @$_), values %results);
     $insert->finish;
+    $self->{db}->commit;
 }
 
 
