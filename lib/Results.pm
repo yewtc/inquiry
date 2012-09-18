@@ -37,7 +37,8 @@ sub new {
     my ($class, $filename, $ip) = @_;
     my $self = {};
     $self->{db} = DBI->connect("dbi:SQLite:dbname=$filename", q(), q(),
-                               {RaiseError => 1});
+                               {RaiseError => 1,
+                                AutoCommit => 0});
     $self->{id} = _generate_id($ip);
     return bless $self, $class;
 }
