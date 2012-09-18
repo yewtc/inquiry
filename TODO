@@ -1,6 +1,8 @@
-* simplify javascript
+* DONE simplify javascript
 
-- IE 8 does not understand JQuery :-(
+** DONE IE 8 does not understand JQuery :-(
+
+Was not needed, I made it work.
 
 implement the logic in simple JS:
 
