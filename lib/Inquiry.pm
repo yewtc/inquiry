@@ -20,11 +20,18 @@ use constant {
 my $survey = Survey->new('anketa.txt');
 
 any [qw/get post/] => '/' => sub {
-    unless (session('shaken')) {
+    if (not session('intro')) {
+        session intro => 1;
+        return template 'intro', {intro => $survey->{intro}};
+
+    } elsif (not session('shaken')) {
         session shaken => $survey->shake(QUESTION_COUNT);
+
     }
+
     if (session('current')) {
         session current => 1 + session('current') if 'Další' eq (param('next') // q());
+
     } else {
         session current => 1;
     }
