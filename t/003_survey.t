@@ -14,47 +14,38 @@ is($s, undef, "No obj: $n");
 $n = 'File not found';
 $s = eval { Survey->new('"') };
 ok((defined $@ and length $@), "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Duplicate id';
 $s = eval { Survey->new('t/003-d.txt') };
 like($@, qr/Duplicate/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Question in question';
 $s = eval { Survey->new('t/003-q.txt') };
 like($@, qr/Cannot start question/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Answer in answer';
 $s = eval { Survey->new('t/003-aa.txt') };
 like($@, qr/Cannot start answer/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Answer without question';
 $s = eval { Survey->new('t/003-a.txt') };
 like($@, qr/Cannot start answer/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Answer in none';
 $s = eval { Survey->new('t/003-an.txt') };
 like($@, qr/Cannot put answers/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Answer in question';
 $s = eval { Survey->new('t/003-aq.txt') };
 like($@, qr/Cannot put answers/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Invalid line';
 $s = eval { Survey->new('t/003-i.txt') };
 like($@, qr/Invalid line/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $n = 'Self incompatibility';
 $s = eval { Survey->new('t/003-c.txt') };
 like($@, qr/Impossible incompatibility/, "Died: $n");
-is($s, undef, "No obj: $n");
 
 $s = eval { Survey->new('t/003-cm.txt') };
 is(ref $s, 'Survey', 'Example loaded');
@@ -70,11 +61,26 @@ ok(exists $s->{2}{incompatible}{1}, 'Incompatibilities fixed');
 $n = 'No unfold';
 $s = eval { Survey->new('t/003-fn.txt') };
 like($@, qr/No unfold/, "Died: $n");
-is($s, undef, "No obj: $n");
 
-$s = eval { Survey->new('t/003-fm.txt') };
+$s = eval { Survey->new('t/003-nq.txt') };
+like($@, qr/No questions/, 'No questions');
+
+$s = eval { Survey->new('t/003-nqt.txt') };
+like($@, qr/No question text in /, 'No text in question');
+
+$s = eval { Survey->new('t/003-na.txt') };
+like($@, qr/No answer at /, 'No answer');
+
+$s = eval { Survey->new('t/003-nf.txt') };
+like($@, qr/No unfolds at /, 'No unfold');
+
+$s = Survey->new('t/003-fm.txt');
 is(ref $s, 'Survey', 'Example loaded');
 is(@{ $s->{1}{unfold} }, 2, 'Multiple unfold');
+
+$s = Survey->new('t/003-in.txt');
+is(ref $s, 'Survey', 'Example loaded');
+is($s->{intro}[0], "Introduction\n", 'Introduction');
 
 # Test real data loading
 

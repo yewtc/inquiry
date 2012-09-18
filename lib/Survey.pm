@@ -149,18 +149,40 @@ sub _load {
             $_ = "<br>$_" if /^\s/;
             push @{ $self->{$current}{question} }, $_;
 
+        } elsif (NONE == $mode) {
+            $_ = "<p>$_" if /^\s/;
+            push @{ $self->{intro} }, $_;
+
         } else {
             die "Invalid line $.\n";
         }
     }
+    $self->_check_completness;
     $self->_fix_incompatibility;
+}
+
+
+sub _check_completness {
+    my $self = shift;
+    my @questions = grep /^[0-9]+$/, keys %$self;
+    die "No questions\n" unless @questions;
+
+    for my $q_num (@questions) {
+        my $question = $self->{$q_num};
+        die "No question text in $q_num\n" unless @{ $question->{question} // [] };
+        die "No answer at $q_num\n"        unless @{ $question->{normal}   // [] };
+
+        for my $unfold (@{ $question->{unfold} // []}) {
+            die "No unfolds at $q_num\n" unless @$unfold;
+        }
+    }
 }
 
 
 sub _fix_incompatibility {
     my $self = shift;
     my %incompatible;
-    for my $question (grep exists $self->{$_}{incompatible}, keys %$self) {
+    for my $question (grep exists $self->{$_}{incompatible}, grep /^[0-9]+$/, keys %$self) {
         undef $incompatible{$question}{$_} for keys %{ $self->{$question}{incompatible} };
     }
     for my $q1 (keys %incompatible) {
@@ -187,6 +209,9 @@ sub debug_dump {
 =back
 
 =head1 SYNTAX
+
+  Introductory text. Will be shown before the inquiry starts.
+    Indent a line to start a new paragraph.
 
   1* 2
   This is the first question. It is incompatible with question number 2.
