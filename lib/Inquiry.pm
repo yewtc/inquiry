@@ -45,7 +45,7 @@ any [qw/get post/] => '/' => sub {
     template 'by_one', {current => session('current'),
                         shaken  => session('shaken'),
                         max     => QUESTION_COUNT,
-                        set_features(qw/NEXT AGAIN FINISH TITLE/),
+                        set_features(qw/NEXT AGAIN FINISH TITLE MISSING/),
                        };
 };
 
@@ -72,7 +72,9 @@ post '/submit_one' => sub {
 
 
 get '/all' => sub {
-    template 'index', { questions => $survey->shake(QUESTION_COUNT) };
+    template 'index', { questions => $survey->shake(QUESTION_COUNT),
+                        intro => $survey->{intro},
+                        set_features(qw/AGAIN FINISH TITLE MISSING/)};
 };
 
 

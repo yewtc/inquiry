@@ -113,7 +113,7 @@ sub _load {
         if (/^([0-9]+)\*([\s0-9]*)$/) {
             ($mode, $current) = $self->_question_header($1, $2, $mode);
 
-        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH)\*\s*(.*)/ and $mode == NONE) {
+        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH|MISSING)\*\s*(.*)/ and $mode == NONE) {
             my ($type, $text) = ($1, $2);
             die "Duplicate $type at $.\n" if exists $self->{$type};
             $self->{$type} = $text;
@@ -221,14 +221,15 @@ sub _check_completness {
 
 sub _set_defaults {
     my $self = shift;
-    for my $type (qw/TITLE START NEXT AGAIN FINISH THANK/) {
+    for my $type (qw/TITLE START NEXT AGAIN FINISH MISSING THANK/) {
         unless (exists $self->{$type}) {
-            $self->{$type} = {TITLE  => 'Survey',
-                              START  => 'Start',
-                              NEXT   => 'Next',
-                              AGAIN  => 'Start again',
-                              FINISH => 'Finish',
-                              THANK  => ['Thank you.'],
+            $self->{$type} = {TITLE   => 'Survey',
+                              START   => 'Start',
+                              NEXT    => 'Next',
+                              AGAIN   => 'Start again',
+                              FINISH  => 'Finish',
+                              MISSING => 'Missing answer',
+                              THANK   => ['Thank you.'],
                              }->{$type};
         }
     }
@@ -275,10 +276,11 @@ sub debug_dump {
   Introductory text. Will be shown before the inquiry starts.
     Indent a line to start a new paragraph.
 
-  START*  Text to be shown on the "Start" button under the introduction. Default: Start.
-  NEXT*   Text to be shown on the "Next" button. Default: Next.
-  AGAIN*  Text to be shown on the "Start again" button. Default: Start again.
-  FINISH* Text to be shown on the last submit button. Default: Finish.
+  START*   Text to be shown on the "Start" button under the introduction. Default: Start.
+  NEXT*    Text to be shown on the "Next" button. Default: Next.
+  AGAIN*   Text to be shown on the "Start again" button. Default: Start again.
+  FINISH*  Text to be shown on the last submit button. Default: Finish.
+  MISSING* The message shown when no answer is given. Default: Missing answer.
 
   1* 2
   This is the first question. It is incompatible with question number 2.

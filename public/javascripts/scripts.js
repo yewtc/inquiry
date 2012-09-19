@@ -30,13 +30,13 @@ function checking (q, i, u) {
 }
 
 
-function validate () {
+function validate (msg, shownum) {
     var ps = $('div[name^="p"]');
     for (i=0; i< ps.length ; i++ ) {
         var p = ps[i];
         var checked = $(p).find('input:checked');
         if (checked.length == 0) {
-            alert('Chybi odpoved ' + (i + 1));
+            alert(msg + (shownum ? ' ' + (i + 1) : '.' ));
             return false;
         }
     }

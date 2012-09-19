@@ -1,6 +1,6 @@
 <h1><% vTITLE %></h1>
 <p>
-<form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>" onsubmit="return validate()">
+<form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>" onsubmit="return validate('<% vMISSING %>', 0)">
 <% n = 0 %>
   <% FOREACH q IN shaken %>
   <% n=n+1 %>

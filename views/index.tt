@@ -1,6 +1,11 @@
-<h1>Anketa</h1>
+<h1><% vTITLE %></h1>
+
+<% FOR intro_l IN intro %>
+  <% intro_l %>
+<% END %>
+
 <% n = 0 %>
-<form action="submit" onsubmit="return validate()">
+<form action="submit" onsubmit="return validate('<% vMISSING %>', 1)">
   <% FOREACH q IN questions %>
   <div name="p<% q.0 %>" style="padding:4pt 4pt 24pt 4pt;">
      <b><% n = n + 1; get n %>. </b>
@@ -42,5 +47,5 @@
 
   <% END %>
 <p>
-<input type="submit" value="Hotovo">
+<input type="submit" value="<% vFINISH %>">
 </form>
