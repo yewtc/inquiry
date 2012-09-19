@@ -47,5 +47,7 @@
 <% ELSE %>
      <input name="next" type="submit" value="<% vNEXT %>">
 <% END %>
-<input type="button" name="again" value="<% vAGAIN %>" onclick="window.location='/again'">
+<%IF vAGAIN != '' %>
+  <input type="button" name="again" value="<% vAGAIN %>" onclick="window.location='/again'">
+<% END %>
 </form>
