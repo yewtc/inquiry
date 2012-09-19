@@ -52,7 +52,7 @@ Returns the number of questions in the full survery.
 =cut
 
 sub count {
-    return scalar keys %{+shift};
+    return scalar keys %{shift->{questions}};
 }
 
 
@@ -67,7 +67,8 @@ questions will be skipped.
 
 sub shake {
     my ($self, $max) = @_;
-    my @all_questions = map { [$_, $self->{$_}] } shuffle keys %$self;
+    my @all_questions = map { [$_, $self->{questions}{$_}] }
+                        shuffle keys %{ $self->{questions} };
 
     my @questions;
     my $used = 0;
@@ -94,6 +95,8 @@ use constant {
     QUESTION => 1,
     ANSWER   => 2,
     UNFOLD   => 3,
+    THANK    => 4,
+    OPINION  => 5,
 };
 
 sub _load {
@@ -110,6 +113,22 @@ sub _load {
         if (/^([0-9]+)\*([\s0-9]*)$/) {
             ($mode, $current) = $self->_question_header($1, $2, $mode);
 
+        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH)\*\s*(.*)/ and $mode == NONE) {
+            my ($type, $text) = ($1, $2);
+            die "Duplicate $type at $.\n" if exists $self->{$type};
+            $self->{$type} = $text;
+
+        } elsif (/^THANK\*/) {
+            die "Duplicate THANK at $.\n" if exists $self->{THANK};
+            die "Cannot start THANK at $.\n" if grep $_ == $mode, NONE, QUESTION, THANK;
+            $mode = THANK;
+
+        } elsif (/^OPINION\*\s*(.*)/) {
+            die "Duplicate OPINION at $.\n" if exists $self->{opinion};
+            die "Cannot start OPINION at $.\n" if ANSWER != $mode and UNFOLD != $mode;
+            $self->{opinion}{submit} = $1;
+            $mode = OPINION;
+
         } elsif (/^[0-9]*\*\*/) {
             die "Cannot start answer at $.\n" if QUESTION != $mode;
             $mode = ANSWER;
@@ -120,17 +139,25 @@ sub _load {
 
         } elsif (QUESTION == $mode) {
             $_ = "<br>$_" if /^\s/;
-            push @{ $self->{$current}{question} }, $_;
+            push @{ $self->{questions}{$current}{question} }, $_;
 
         } elsif (NONE == $mode) {
             $_ = "<p>$_" if /^\s/;
             push @{ $self->{intro} }, $_;
 
+        } elsif (THANK == $mode) {
+            push @{ $self->{THANK} }, $_;
+
+        } elsif (OPINION == $mode) {
+            push @{ $self->{opinion}{text} }, $_;
+
         } else {
             die "Invalid line $.\n";
         }
     }
+
     $self->_check_completness;
+    $self->_set_defaults;
     $self->_fix_incompatibility;
 }
 
@@ -142,18 +169,18 @@ sub _answer {
            || QUESTION == $mode
            and $alone || $unfold;
     s/^\s*[!+]+//;
-    push @{ $self->{$current}{normal} },
+    push @{ $self->{questions}{$current}{normal} },
         [$_, $alone, $unfold ? 1 : 0];
     if ('+' eq $unfold) {
         $mode = UNFOLD;
-        push @{ $self->{$current}{unfold} }, [];
+        push @{ $self->{questions}{$current}{unfold} }, [];
         my $first = 1;
         while (<$IN>) {
             if (not /^\s*!?-(?:[0-9]+\.)?(.*)/) {
                 die "No unfold at $.\n" if $first;
                 return $mode, 1;
             }
-            push @{ $self->{$current}{unfold}[-1] }, $1;
+            push @{ $self->{questions}{$current}{unfold}[-1] }, $1;
             undef $first;
         }
     }
@@ -163,23 +190,24 @@ sub _answer {
 
 sub _question_header {
     my ($self, $current, $incompatible, $mode) = @_;
-    die "Duplicate $current at $.\n" if exists $self->{$current};
-    die "Cannot start question at $.\n" if QUESTION == $mode;
+    die "Duplicate $current at $.\n" if exists $self->{questions}{$current};
+    die "Cannot start question at $.\n" if grep $_ == $mode, QUESTION, THANK, OPINION;
     if ($incompatible =~ /[0-9]/) {
-        undef $self->{$current}{incompatible}{$_} for split ' ', $incompatible;
+        undef $self->{questions}{$current}{incompatible}{$_} for split ' ', $incompatible;
         die "Impossible incompatibility at $.\n"
-            if exists $self->{$current}{incompatible}{$current};
+            if exists $self->{questions}{$current}{incompatible}{$current};
     }
     return QUESTION, $current;
 }
 
+
 sub _check_completness {
     my $self = shift;
-    my @questions = grep /^[0-9]+$/, keys %$self;
+    my @questions = keys %{ $self->{questions} };
     die "No questions\n" unless @questions;
 
     for my $q_num (@questions) {
-        my $question = $self->{$q_num};
+        my $question = $self->{questions}{$q_num};
         die "No question text in $q_num\n" unless @{ $question->{question} // [] };
         die "No answer at $q_num\n"        unless @{ $question->{normal}   // [] };
 
@@ -187,18 +215,39 @@ sub _check_completness {
             die "No unfolds at $q_num\n" unless @$unfold;
         }
     }
+
+}
+
+
+sub _set_defaults {
+    my $self = shift;
+    for my $type (qw/TITLE START NEXT AGAIN FINISH THANK/) {
+        unless (exists $self->{$type}) {
+            $self->{$type} = {TITLE  => 'Survey',
+                              START  => 'Start',
+                              NEXT   => 'Next',
+                              AGAIN  => 'Start again',
+                              FINISH => 'Finish',
+                              THANK  => ['Thank you.'],
+                             }->{$type};
+        }
+    }
+    $self->{opinion}{submit} = 'Submit'
+        if exists $self->{opinion} and $self->{opinion}{submit} =~ /^$/;
 }
 
 
 sub _fix_incompatibility {
     my $self = shift;
     my %incompatible;
-    for my $question (grep exists $self->{$_}{incompatible}, grep /^[0-9]+$/, keys %$self) {
-        undef $incompatible{$question}{$_} for keys %{ $self->{$question}{incompatible} };
+    for my $question (grep exists $self->{questions}{$_}{incompatible},
+                      keys %{ $self->{questions} }) {
+        undef $incompatible{$question}{$_}
+            for keys %{ $self->{questions}{$question}{incompatible} };
     }
     for my $q1 (keys %incompatible) {
         for my $q2 (keys %{ $incompatible{$q1} })  {
-            undef $self->{$q2}{incompatible}{$q1};
+            undef $self->{questions}{$q2}{incompatible}{$q1};
         }
     }
 }

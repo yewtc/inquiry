@@ -56,7 +56,7 @@ like($@, qr/Not enough/, 'Not enough compatible questions');
 is($x, undef, 'No questions generated');
 
 $s = Survey->new('t/003-c0.txt');
-ok(exists $s->{2}{incompatible}{1}, 'Incompatibilities fixed');
+ok(exists $s->{questions}{2}{incompatible}{1}, 'Incompatibilities fixed');
 
 $n = 'No unfold';
 $s = eval { Survey->new('t/003-fn.txt') };
@@ -76,11 +76,56 @@ like($@, qr/No unfolds at /, 'No unfold');
 
 $s = Survey->new('t/003-fm.txt');
 is(ref $s, 'Survey', 'Example loaded');
-is(@{ $s->{1}{unfold} }, 2, 'Multiple unfold');
+is(@{ $s->{questions}{1}{unfold} }, 2, 'Multiple unfold');
+is($s->{TITLE},            'Survey',        'Default Title');
+is($s->{START},            'Start',         'Default Start');
+is($s->{NEXT},             'Next',          'Default Next');
+is($s->{AGAIN},            'Start again',   'Default Again');
+is($s->{FINISH},           'Finish',        'Default Finish');
+is($s->{opinion}{submit},  'Submit',        'Default Opinion Submit');
+is_deeply($s->{THANK},     ['Thank you.'],  'Default Thank');
+
+$s = eval { Survey->new('t/003-dt.txt') };
+like($@, qr/Duplicate TITLE at /, 'Duplicate title');
+
+$s = eval { Survey->new('t/003-dth.txt') };
+like($@, qr/Duplicate THANK at /, 'Duplicate THANK');
+
+$s = eval { Survey->new('t/003-thn.txt') };
+like($@, qr/Cannot start THANK at /, 'THANK in NONE');
+
+$s = eval { Survey->new('t/003-thq.txt') };
+like($@, qr/Cannot start THANK at /, 'THANK in QUESTION');
+
+$s = eval { Survey->new('t/003-tq.txt') };
+like($@, qr/Cannot start question at /, 'Question after THANK');
+
+$s = eval { Survey->new('t/003-do.txt') };
+like($@, qr/Duplicate OPINION at /, 'Duplicate OPINION');
+
+$s = eval { Survey->new('t/003-on.txt') };
+like($@, qr/Cannot start OPINION at /, 'OPINION in NONE');
+
+$s = eval { Survey->new('t/003-oq.txt') };
+like($@, qr/Cannot start OPINION at /, 'OPINION in QUESTION');
+
+$s = eval { Survey->new('t/003-oq2.txt') };
+like($@, qr/Cannot start question at /, 'Question after OPINION');
+
+$s = eval { Survey->new('t/003-to.txt') };
+like($@, qr/Cannot start OPINION at /, 'OPINION after THANK');
 
 $s = Survey->new('t/003-in.txt');
-is(ref $s, 'Survey', 'Example loaded');
-is($s->{intro}[0], "Introduction\n", 'Introduction');
+is(ref $s,                       'Survey',                'Example loaded');
+is($s->{intro}[0],               "Introduction\n",        'Introduction');
+is($s->{TITLE},                  'Title-t',               'Title');
+is($s->{START},                  'Start-t',               'Start');
+is($s->{NEXT},                   'Next-t',                'Next');
+is($s->{AGAIN},                  'Start over-t',          'Again');
+is($s->{FINISH},                 'Finish-t',              'Finish');
+is_deeply($s->{THANK},           ["Thank-t\n"],           'Thank');
+is_deeply($s->{opinion}{text},   ["Whadda you think?\n"], 'Opinion');
+is_deeply($s->{opinion}{submit}, "stumbit",               'Opinion Submit');
 
 # Test real data loading
 

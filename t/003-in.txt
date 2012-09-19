@@ -1,6 +1,20 @@
+TITLE* Title-t
 Introduction
+
+START* Start-t
+NEXT* Next-t
+AGAIN* Start over-t
+FINISH* Finish-t
 
 1*
 Q
 **
 1. a
+
+OPINION* stumbit
+
+Whadda you think?
+
+THANK*
+
+Thank-t
