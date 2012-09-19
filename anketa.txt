@@ -46,7 +46,7 @@ Select any combination from 1-3, or select 4.
 3. Three.
 !4. None of the above.
 
-7*
+6*
 Question with nonalone unfolds.
 **
 1. Answer one.
@@ -58,3 +58,7 @@ Question with nonalone unfolds.
 !+5. Incompatible answer five with unfolds:
 -1. The number one.
 -2. The number two.
+
+OPINION*
+
+Tell us what you think.

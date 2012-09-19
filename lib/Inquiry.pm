@@ -6,6 +6,7 @@ use utf8;
 
 use Survey;
 use Results;
+use Opinion;
 use Dancer ':syntax';
 
 use Data::Dumper;
@@ -64,6 +65,8 @@ post '/submit_one' => sub {
                        map { $_ => session($_) }
                            grep /^(?:qa?n|r)[0-9]+-[0-9]+$/,
                            keys %{ session() });
+        session 'db_id' => $results->{id};
+        forward '/opinion' if exists $survey->{opinion};
         session->destroy;
         forward '/thanks';
     }
@@ -83,10 +86,26 @@ get '/submit' => sub {
         my $results = Results->new(DB_FILE, request->address);
         $results->init($survey->count);
         $results->save(params());
+        session 'db_id' => $results->{id};
+        forward '/opinion' if exists $survey->{opinion};
         session->destroy;
         forward '/thanks';
     }
     send_error 'Cannot submit';
+};
+
+
+any [qw/post get/] => '/opinion' => sub {
+    template 'opinion', { opinion => $survey->{opinion},
+                          set_features(qw/TITLE/)};
+};
+
+
+post '/opinion/done' => sub {
+    my $op = Opinion->new(DB_FILE);
+    $op->save(session('db_id'), param('opinion'));
+    session->destroy;
+    forward '/thanks';
 };
 
 
@@ -99,7 +118,23 @@ any [qw/post get/] => '/thanks' => sub {
 get '/table' => sub {
     my $results = Results->new(DB_FILE);
     $results->init($survey->count);
-    template 'table', { results => [ values %{ $results->retrieve } ] };
+    my $opinions = Opinion->new(DB_FILE);
+    template 'table', { count => $survey->count,
+                        results  => [ $results->retrieve ],
+                        opinions => $opinions->ids,
+                      };
+};
+
+get '/opinion/show' => sub {
+    my $opinion = Opinion->new(DB_FILE);
+    my $opinions = $opinion->retrieve;
+    debug Dumper $opinions;
+    debug param('o');
+    my $show = $opinions->{param('o')};
+    $show =~ s/&/\&amp;/g;
+    $show =~ s/</\&lt;/g;
+    $show =~ s/\n/<br>/g;
+    return $show;
 };
 
 

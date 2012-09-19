@@ -1,0 +1,13 @@
+<h1><% vTITLE %></h1>
+<p>
+<% FOR op IN opinion.text %>
+  <% op %>
+<% END %>
+
+<form method="post" action="/opinion/done">
+
+<textarea rows=5 cols=78 name="opinion"></textarea>
+
+<p>
+<input type="submit" value="<% opinion.submit %>">
+</form>

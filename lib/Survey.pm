@@ -115,6 +115,7 @@ sub _load {
 
         } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH|MISSING)\*\s*(.*)/ and $mode == NONE) {
             my ($type, $text) = ($1, $2);
+            $text =~ s/'/\\'/g if 'MISSING' eq $type;
             die "Duplicate $type at $.\n" if exists $self->{$type};
             $self->{$type} = $text;
 

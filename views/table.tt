@@ -1,14 +1,23 @@
-<h1>Výsledky</h1>
-<% n = 0 %>
+<h1>Results</h1>
 <table border=1>
-  <tr>
-    <% FOREACH _r in results.0 %>
-      <td><% n = n + 1 %><% n %>*
+  <tr><th>id
+    <% n = 1 %>
+    <% WHILE n <= count %>
+      <th><% n %>*
+      <% n = n + 1 %>
     <% END %>
-<% FOREACH row IN results %>
+<% FOREACH result IN results %>
+  <% FOREACH record IN result %>
+  <% key = record.key %>
+
   <tr>
-  <% FOREACH column IN row %>
-    <td><% column %>
+    <td>
+      <% IF opinions.$key %><a target="_blank" href="opinion/show?o=<% key %>"><% END %>
+      <% key %>
+      <% IF opinions.$key %></a><% END %>
+    <% FOREACH answer IN record.value %>
+      <td><% answer %>
+    <% END %>
   <% END %>
 <% END %>
 </table>
