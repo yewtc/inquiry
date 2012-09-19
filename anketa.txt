@@ -3,68 +3,48 @@ Introduction
   Will be shown before the survey starts.
 
 1* 2
-Použili byste kteroukoli z uvedených vět? (U odpovědi NE je možno zašrtnout více možností.)
-  A) Pouze tučňáci žijí na Jižním pólu.
-  B) Přece tučňáci žijí na Jižním pólu.
-  C)Také tučňáci žijí na Jižním pólu.
-  D) Dokonce tučňáci žijí na Jižním pólu.
+Select any combination of the following answers.
 **
-!1. ANO, použil/a bych kteroukoli větu.
-2. NE, nepoužil/a bych větu - A
-3. NE, nepoužil/a bych větu - B
-4. NE, nepoužil/a bych větu - C
-5. NE, nepoužil/a bych větu - D
+1. First one.
+2. Second one.
+3. Third one.
+4. Last one.
 
 2* 1
-Přijde Vám některá z následujících vět příznaková, nepřirozená? (U odpovědi ANO je možno zašrtnout více možností.)
- A) Taky můj manžel nepije alkohol.
- B) Ani můj manžel nepije alkohol.
- C) Především můj manžel nepije alkohol.
- D) Přece můj manžel nepije alkohol.
+Select any combination of the following answers.
+  This is an alternative to number 1.
 **
-!1. NE, všechny věty mi přijdou nepříznakové.
-2. ANO, příznaková mi přijde věta - A
-3. ANO, příznaková mi přijde věta - B
-4. ANO, příznaková mi přijde věta - C
-5. ANO, příznaková mi přijde věta - D
+1. First one.
+2. Second one.
+3. Third one.
+4. Last one.
 
 3*
-Kterou z následujících možností chápete jako přirozené doplnění první části souvětí
-  Objem úvěrů nyní v USA roste v meziročním srovnání o 2,7 procenta,... 
+Select one of the following:
 **
-!1. ... v eurozóně dokonce klesá o 0,4 procenta. 
-!2. ... v eurozóně klesá dokonce o 0,4 procenta. 
+!1. Number one.
+!2. Number two.
 
 % Tady se dá napsat cokoliv, poznámka pro autora, respondenti to nikdy neuvidí.
 
-4* 6
-Jak chápete větu „Dej si ještě koláč!“
+4*
+Unfolding example. Click on 3 to see it work.
 **
-!1. Už jsem měl koláč a mám si ho přidat.
-!2. Už jsem měl jiné pokrmy z nabídky a teď mám ochutnat koláč.
-!+3. Věta znamená obě možnosti
--1. jako první mě napadla - 1.
--2. jako první mě napadla - 2.
--3. nejsem schopen/a posoudit
+!1. Not compatible with others.
+!2. Not compatible either.
+!+3. Unfold.
+-1. I prefer 1.
+-2. I prefer 2.
+-3. No preference.
 
 5*
-Je možné na základě věty
-  „Igor má doma dokonce kobru.“ 
-  vyvodit některé z následujících tvrzení? (Je možné vybrat více odpovědí)
+Select any combination from 1-3, or select 4.
+  „4 is not compatible with the rest.“ 
 **
-1. Igor má doma i jiné hady.
-2. Igor má doma i něco jiného.
-3. Igor má doma i jiná zvířata.
-!4. Žádné z tvrzení nelze vyvodit.
-
-6* 4
-Jaký je význam věty: „Pachatelem byl jedině on.“?
-**
-!1. Pachatelem musel být právě tento člověk.
-!2. Pachatelem byl tento člověk sám a nikdo jiný.
-!+3. Věta znamená obě možnosti.
--1. jako první mě napadla - 1.
--2. jako první mě napadla - 2.
+1. One.
+2. Two.
+3. Three.
+!4. None of the above.
 
 7*
 Question with nonalone unfolds.

@@ -1,9 +1,9 @@
-<h1>Anketa</h1>
+<h1><% vTITLE %></h1>
 
 <% FOR par IN intro %>
    <% par %>
 <% END %>
 <p>
 <form method="post" action="/">
-<input type="submit" value="Start">
+<input type="submit" value="<% vSTART %>">
 </form>

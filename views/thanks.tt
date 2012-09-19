@@ -1,1 +1,5 @@
-Děkujeme za Váš čas.
+<h1><% vTITLE %></h1>
+<p>
+<% FOR th IN thank %>
+  <% th %>
+<% END %>

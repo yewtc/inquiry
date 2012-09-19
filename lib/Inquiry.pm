@@ -22,7 +22,9 @@ my $survey = Survey->new('anketa.txt');
 any [qw/get post/] => '/' => sub {
     if (not session('intro')) {
         session intro => 1;
-        return template 'intro', {intro => $survey->{intro}} if exists $survey->{intro};
+        return template 'intro', {intro => $survey->{intro},
+                                  set_features(qw/START TITLE/)
+                                 } if exists $survey->{intro};
     }
 
     if (not session('shaken')) {
@@ -30,7 +32,7 @@ any [qw/get post/] => '/' => sub {
     }
 
     if (session('current')) {
-        session current => 1 + session('current') if 'Další' eq (param('next') // q());
+        session current => 1 + session('current') if $survey->{NEXT} eq (param('next') // q());
 
     } else {
         session current => 1;
@@ -42,7 +44,9 @@ any [qw/get post/] => '/' => sub {
 
     template 'by_one', {current => session('current'),
                         shaken  => session('shaken'),
-                        max     => QUESTION_COUNT};
+                        max     => QUESTION_COUNT,
+                        set_features(qw/NEXT AGAIN FINISH TITLE/),
+                       };
 };
 
 
@@ -85,7 +89,8 @@ get '/submit' => sub {
 
 
 any [qw/post get/] => '/thanks' => sub {
-    template 'thanks';
+    template 'thanks', { thank => $survey->{THANK},
+                         set_features(qw/TITLE/) };
 };
 
 
@@ -95,5 +100,9 @@ get '/table' => sub {
     template 'table', { results => [ values %{ $results->retrieve } ] };
 };
 
+
+sub set_features {
+    return map { 'v' . $_ => $survey->{$_} } @_;
+}
 
 true;

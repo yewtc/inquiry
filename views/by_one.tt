@@ -1,4 +1,4 @@
-<h1>Anketa</h1>
+<h1><% vTITLE %></h1>
 <p>
 <form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>" onsubmit="return validate()">
 <% n = 0 %>
@@ -43,9 +43,9 @@
 
 <p>
 <%IF current >= max %>
-     <input type="submit" value="Hotovo">
+     <input type="submit" value="<% vFINISH %>">
 <% ELSE %>
-     <input name="next" type="submit" value="Další">
+     <input name="next" type="submit" value="<% vNEXT %>">
 <% END %>
-<input type="button" name="again" value="Začít znovu" onclick="window.location='/again'">
+<input type="button" name="again" value="<% vAGAIN %>" onclick="window.location='/again'">
 </form>
