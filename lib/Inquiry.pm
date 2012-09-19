@@ -128,8 +128,6 @@ get '/table' => sub {
 get '/opinion/show' => sub {
     my $opinion = Opinion->new(DB_FILE);
     my $opinions = $opinion->retrieve;
-    debug Dumper $opinions;
-    debug param('o');
     my $show = $opinions->{param('o')};
     $show =~ s/&/\&amp;/g;
     $show =~ s/</\&lt;/g;
