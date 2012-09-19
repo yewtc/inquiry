@@ -22,11 +22,11 @@ my $survey = Survey->new('anketa.txt');
 any [qw/get post/] => '/' => sub {
     if (not session('intro')) {
         session intro => 1;
-        return template 'intro', {intro => $survey->{intro}};
+        return template 'intro', {intro => $survey->{intro}} if exists $survey->{intro};
+    }
 
-    } elsif (not session('shaken')) {
+    if (not session('shaken')) {
         session shaken => $survey->shake(QUESTION_COUNT);
-
     }
 
     if (session('current')) {
