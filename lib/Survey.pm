@@ -108,42 +108,15 @@ sub _load {
         s|“|</i>|g;
 
         if (/^([0-9]+)\*([\s0-9]*)$/) {
-            ($current, my $incompatible) = ($1, $2);
-            die "Duplicate $current at $.\n" if exists $self->{$current};
-            die "Cannot start question at $.\n" if QUESTION == $mode;
-            if ($incompatible =~ /[0-9]/) {
-                undef $self->{$current}{incompatible}{$_} for split ' ', $incompatible;
-                die "Impossible incompatibility at $.\n"
-                  if exists $self->{$current}{incompatible}{$current};
-            }
-            $mode = QUESTION;
+            ($mode, $current) = $self->_question_header($1, $2, $mode);
 
         } elsif (/^[0-9]*\*\*/) {
             die "Cannot start answer at $.\n" if QUESTION != $mode;
             $mode = ANSWER;
 
         } elsif (/^\s*(!?)(\+?)([0-9]+)\./) {
-            my ($alone, $unfold, $num) = ($1, $2, $3);
-            die "Cannot put answers at $.\n"
-                if NONE == $mode
-                   || QUESTION == $mode
-                   and $alone || $unfold;
-            s/^\s*[!+]+//;
-            push @{ $self->{$current}{normal} },
-                [$_, $alone, $unfold ? 1 : 0];
-            if ('+' eq $unfold) {
-                $mode = UNFOLD;
-                push @{ $self->{$current}{unfold} }, [];
-                my $first = 1;
-                while (<$IN>) {
-                    if (not /^\s*!?-(?:[0-9]+\.)?(.*)/) {
-                        die "No unfold at $.\n" if $first;
-                        redo LINE;
-                    }
-                    push @{ $self->{$current}{unfold}[-1] }, $1;
-                    undef $first;
-                }
-            }
+            ($mode, my $redo) = $self->_answer($1, $2, $3, $current, $mode, $IN);
+            redo LINE if $redo;
 
         } elsif (QUESTION == $mode) {
             $_ = "<br>$_" if /^\s/;
@@ -161,6 +134,44 @@ sub _load {
     $self->_fix_incompatibility;
 }
 
+
+sub _answer {
+    my ($self, $alone, $unfold, $num, $current, $mode, $IN) = @_;
+    die "Cannot put answers at $.\n"
+        if NONE == $mode
+           || QUESTION == $mode
+           and $alone || $unfold;
+    s/^\s*[!+]+//;
+    push @{ $self->{$current}{normal} },
+        [$_, $alone, $unfold ? 1 : 0];
+    if ('+' eq $unfold) {
+        $mode = UNFOLD;
+        push @{ $self->{$current}{unfold} }, [];
+        my $first = 1;
+        while (<$IN>) {
+            if (not /^\s*!?-(?:[0-9]+\.)?(.*)/) {
+                die "No unfold at $.\n" if $first;
+                return $mode, 1;
+            }
+            push @{ $self->{$current}{unfold}[-1] }, $1;
+            undef $first;
+        }
+    }
+    return $mode, 0;
+}
+
+
+sub _question_header {
+    my ($self, $current, $incompatible, $mode) = @_;
+    die "Duplicate $current at $.\n" if exists $self->{$current};
+    die "Cannot start question at $.\n" if QUESTION == $mode;
+    if ($incompatible =~ /[0-9]/) {
+        undef $self->{$current}{incompatible}{$_} for split ' ', $incompatible;
+        die "Impossible incompatibility at $.\n"
+            if exists $self->{$current}{incompatible}{$current};
+    }
+    return QUESTION, $current;
+}
 
 sub _check_completness {
     my $self = shift;
@@ -210,8 +221,15 @@ sub debug_dump {
 
 =head1 SYNTAX
 
+  TITLE* Optional title of the survey, to be shown as a header. Default: Survey.
+
   Introductory text. Will be shown before the inquiry starts.
     Indent a line to start a new paragraph.
+
+  START*  Text to be shown on the "Start" button under the introduction. Default: Start.
+  NEXT*   Text to be shown on the "Next" button. Default: Next.
+  AGAIN*  Text to be shown on the "Start again" button. Default: Start again.
+  FINISH* Text to be shown on the last submit button. Default: Finish.
 
   1* 2
   This is the first question. It is incompatible with question number 2.
@@ -232,6 +250,16 @@ sub debug_dump {
   **
     !+1. This answer is incompatible with the others (!). When checked, it displays a set of radio buttons (+).
   ...
+
+  OPINION* Submit
+
+  If specified, text area prompting for opinions and remarks will be
+  shown after the survery has finished. The "Submit" parameter is used
+  on the submit button.
+
+  THANK* (Optional)
+
+  The text to be shown on the last page. Defaults to "Thank you."
 
 =head1 AUTHOR
 
