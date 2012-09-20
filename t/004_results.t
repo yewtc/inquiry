@@ -4,8 +4,10 @@ use warnings;
 use Results;
 use Test::More;
 
-unlink 'test.db';
-my $r = Results->new('test.db');
+my $file = 'test_004.db';
+
+unlink $file;
+my $r = Results->new($file);
 like(ref $r, qr/Results/, 'object returned');
 $r->init(4);
 $r->save(qw/qan1-2 on
@@ -24,6 +26,6 @@ is_deeply($r->retrieve,
           { $r->{id} => [2, '2,3', '1:2', '1:1,2:2,3']},
           'all values stored');
 
-unlink 'test.db';
+unlink $file;
 
 done_testing();
