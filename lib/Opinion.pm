@@ -67,7 +67,6 @@ sub save {
     my $st = $self->{db}->prepare('insert into opinions values (?, ?)');
     $st->execute($id, $opinion);
     $self->{db}->commit;
-    $self->{db}->disconnect;
 }
 
 =item ids
@@ -90,7 +89,6 @@ sub ids {
     my $st = $self->{db}->prepare('select connection from opinions');
     $st->execute;
     my $data = { map { $_->[0] => 1 } @{ $st->fetchall_arrayref } };
-    $self->{db}->disconnect;
     return $data;
 }
 
@@ -114,8 +112,12 @@ sub retrieve {
     my $st = $self->{db}->prepare('select * from  opinions');
     $st->execute;
     my $data = { map {+@$_} @{ $st->fetchall_arrayref } };
-    $self->{db}->disconnect;
     return $data;
+}
+
+
+sub DESTROY {
+    shift->{db}->disconnect;
 }
 
 
