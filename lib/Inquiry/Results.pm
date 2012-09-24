@@ -1,4 +1,4 @@
-package Results;
+package Inquiry::Results;
 
 =head1 NAME
 
@@ -6,7 +6,7 @@ Results
 
 =head1 SYNOPSIS
 
-  my $results = Results->new($filename, $ip);
+  my $results = Inquiry::Results->new($filename, $ip);
   my $results->init($count_answers);
   my $results->save(%params);
 
@@ -26,7 +26,7 @@ use DBI;
 
 =item new
 
-  my $results = Results->new($filename, $ip);
+  my $results = Inquiry::Results->new($filename, $ip);
 
 Returns a new Results object, connects to the database in
 $filename. $ip is used to generate unique id.

@@ -1,4 +1,4 @@
-package Opinion;
+package Inquiry::Opinion;
 
 =head1 NAME
 
@@ -6,7 +6,7 @@ Opinion
 
 =head1 SYNOPSIS
 
-  my $op = Opinion->new($filename);
+  my $op = Inquiry::Opinion->new($filename);
   $op->save($id, $opinion);
   my $keys = $op->ids;
   my $opinions = $op->retrieve;
@@ -27,7 +27,7 @@ use DBI;
 
 =item new
 
-  my $op = Opinion->new($filename);
+  my $op = Inqiury::Opinion->new($filename);
 
 Returns an Opinion object connected to a database.
 

@@ -4,9 +4,9 @@ use strict;
 use warnings;
 use utf8;
 
-use Survey;
-use Results;
-use Opinion;
+use Inquiry::Survey;
+use Inquiry::Results;
+use Inquiry::Opinion;
 use Dancer ':syntax';
 
 use Data::Dumper;
@@ -18,7 +18,7 @@ use constant {
     DB_FILE => 'inquiry.db',
 };
 
-my $survey = Survey->new('anketa.txt');
+my $survey = Inquiry::Survey->new('anketa.txt');
 
 any [qw/get post/] => '/' => sub {
     if (not session('intro')) {
@@ -59,7 +59,7 @@ get '/again' => sub {
 
 post '/submit_one' => sub {
     if (session('current')) {
-        my $results = Results->new(DB_FILE, request->address);
+        my $results = Inquiry::Results->new(DB_FILE, request->address);
         $results->init($survey->count);
         $results->save(params(),
                        map { $_ => session($_) }
@@ -83,7 +83,7 @@ get '/all' => sub {
 
 get '/submit' => sub {
     if (params()) {
-        my $results = Results->new(DB_FILE, request->address);
+        my $results = Inquiry::Results->new(DB_FILE, request->address);
         $results->init($survey->count);
         $results->save(params());
         session 'db_id' => $results->{id};
@@ -102,7 +102,7 @@ any [qw/post get/] => '/opinion' => sub {
 
 
 post '/opinion/done' => sub {
-    my $op = Opinion->new(DB_FILE);
+    my $op = Inquiry::Opinion->new(DB_FILE);
     $op->save(session('db_id'), param('opinion'));
     session->destroy;
     forward '/thanks';
@@ -116,9 +116,9 @@ any [qw/post get/] => '/thanks' => sub {
 
 
 get '/table' => sub {
-    my $results = Results->new(DB_FILE);
+    my $results = Inquiry::Results->new(DB_FILE);
     $results->init($survey->count);
-    my $opinions = Opinion->new(DB_FILE);
+    my $opinions = Inquiry::Opinion->new(DB_FILE);
     template 'table', { count => $survey->count,
                         results  => [ $results->retrieve ],
                         opinions => $opinions->ids,
@@ -126,7 +126,7 @@ get '/table' => sub {
 };
 
 get '/opinion/show' => sub {
-    my $opinion = Opinion->new(DB_FILE);
+    my $opinion = Inquiry::Opinion->new(DB_FILE);
     my $opinions = $opinion->retrieve;
     my $show = $opinions->{param('o')};
     $show =~ s/&/\&amp;/g;

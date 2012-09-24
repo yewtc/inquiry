@@ -1,4 +1,4 @@
-package Survey;
+package Inquiry::Survey;
 
 use Data::Dumper;
 use List::Util qw/shuffle/;
@@ -15,7 +15,7 @@ Survey
 
 =head1 SYNOPSIS
 
-  my $sur       = Survey->($filename);
+  my $sur       = Inquiry::Survey->($filename);
   my $max_num   = $sur->count;
   my $questions = $sur->shake($number);
   print STDERR $sur->debug_dump;
@@ -26,7 +26,7 @@ Survey
 
 =item new
 
-  my $sur = Survey->new($filename);
+  my $sur = Inquiry::Survey->new($filename);
 
 Creates a new Survery object, populated from the given file. See L</Syntax> for
 the format of the file.

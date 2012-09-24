@@ -1,13 +1,13 @@
 use strict;
 use warnings;
 
-use Opinion;
+use Inquiry::Opinion;
 use Test::More;
 
 my $file = 'test_005.db';
 
 unlink $file;
-my $o = Opinion->new($file);
+my $o = Inquiry::Opinion->new($file);
 like(ref $o, qr/Opinion/, 'object returned');
 
 $o->save('a0', 1);
