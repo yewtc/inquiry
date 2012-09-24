@@ -83,6 +83,7 @@ is($s->{NEXT},             'Next',           'Default Next');
 is($s->{AGAIN},            'Start again',    'Default Again');
 is($s->{FINISH},           'Finish',         'Default Finish');
 is($s->{MISSING},          'Missing answer', 'Default Missing');
+is($s->{PICK},             4,                'Default Pick');
 is($s->{opinion}{submit},  'Submit',         'Default Opinion Submit');
 is_deeply($s->{THANK},     ['Thank you.'],   'Default Thank');
 
@@ -116,6 +117,15 @@ like($@, qr/Cannot start question at /, 'Question after OPINION');
 $s = eval { Inquiry::Survey->new('t/003-to.txt') };
 like($@, qr/Cannot start OPINION at /, 'OPINION after THANK');
 
+$s = eval { Inquiry::Survey->new('t/003-p.txt') };
+like($@, qr/PICK can only take a positive integer as its argument at /,
+     'PICK is PosInt');
+
+$s = Inquiry::Survey->new('t/003-p2.txt');
+is(ref $s, 'Inquiry::Survey', 'Example loaded');
+my @q = @{ $s->shake };
+is(scalar @q, 2, 'PICK works');
+
 $s = Inquiry::Survey->new('t/003-in.txt');
 is(ref $s,                       'Inquiry::Survey',       'Example loaded');
 is($s->{intro}[0],               "Introduction\n",        'Introduction');
@@ -125,6 +135,7 @@ is($s->{NEXT},                   'Next-t',                'Next');
 is($s->{AGAIN},                  'Start over-t',          'Again');
 is($s->{FINISH},                 'Finish-t',              'Finish');
 is($s->{MISSING},                'missing-t',             'Missing');
+is($s->{PICK},                   1,                       'Pick');
 is_deeply($s->{THANK},           ["Thank-t\n"],           'Thank');
 is_deeply($s->{opinion}{text},   ["Whadda you think?\n"], 'Opinion');
 is_deeply($s->{opinion}{submit}, "stumbit",               'Opinion Submit');

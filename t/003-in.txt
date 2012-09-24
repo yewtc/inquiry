@@ -6,6 +6,7 @@ NEXT* Next-t
 AGAIN* Start over-t
 FINISH* Finish-t
 MISSING* missing-t
+PICK* 1
 
 1*
 Q

@@ -67,6 +67,7 @@ questions will be skipped.
 
 sub shake {
     my ($self, $max) = @_;
+    $max //= $self->{PICK};
     my @all_questions = map { [$_, $self->{questions}{$_}] }
                         shuffle keys %{ $self->{questions} };
 
@@ -113,10 +114,13 @@ sub _load {
         if (/^([0-9]+)\*([\s0-9]*)$/) {
             ($mode, $current) = $self->_question_header($1, $2, $mode);
 
-        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH|MISSING)\*\s*(.*)/ and $mode == NONE) {
+        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH|MISSING|PICK)\*\s*(.*)/
+                 and $mode == NONE) {
             my ($type, $text) = ($1, $2);
             $text =~ s/'/\\'/g if 'MISSING' eq $type;
             die "Duplicate $type at $.\n" if exists $self->{$type};
+            die "PICK can only take a positive integer as its argument at $.\n"
+                if 'PICK' eq $type and $text !~ /^[1-9][0-9]*$/;
             $self->{$type} = $text;
 
         } elsif (/^THANK\*/) {
@@ -222,7 +226,7 @@ sub _check_completness {
 
 sub _set_defaults {
     my $self = shift;
-    for my $type (qw/TITLE START NEXT AGAIN FINISH MISSING THANK/) {
+    for my $type (qw/TITLE START NEXT AGAIN FINISH MISSING PICK THANK/) {
         unless (exists $self->{$type}) {
             $self->{$type} = {TITLE   => 'Survey',
                               START   => 'Start',
@@ -230,6 +234,7 @@ sub _set_defaults {
                               AGAIN   => 'Start again',
                               FINISH  => 'Finish',
                               MISSING => 'Missing answer',
+                              PICK    => 4,
                               THANK   => ['Thank you.'],
                              }->{$type};
         }
@@ -277,6 +282,7 @@ sub debug_dump {
   Introductory text. Will be shown before the inquiry starts.
     Indent a line to start a new paragraph.
 
+  PICK*    Number of questions to be selected when C<shake> is called without a number. Default: 4.
   START*   Text to be shown on the "Start" button under the introduction. Default: Start.
   NEXT*    Text to be shown on the "Next" button. Default: Next.
   AGAIN*   Text to be shown on the "Start again" button. Default: Start again. If specified with no value, the button will not be shown.

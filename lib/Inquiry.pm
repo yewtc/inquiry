@@ -11,10 +11,9 @@ use Dancer ':syntax';
 
 use Data::Dumper;
 
-our $VERSION = '0.3';
+our $VERSION = '0.4';
 
 use constant {
-    QUESTION_COUNT => 4,
     DB_FILE => 'inquiry.db',
 };
 
@@ -29,7 +28,7 @@ any [qw/get post/] => '/' => sub {
     }
 
     if (not session('shaken')) {
-        session shaken => $survey->shake(QUESTION_COUNT);
+        session shaken => $survey->shake;
     }
 
     if (session('current')) {
@@ -45,7 +44,7 @@ any [qw/get post/] => '/' => sub {
 
     template 'by_one', {current => session('current'),
                         shaken  => session('shaken'),
-                        max     => QUESTION_COUNT,
+                        max     => $survey->{PICK},
                         set_features(qw/NEXT AGAIN FINISH TITLE MISSING/),
                        };
 };
@@ -75,7 +74,7 @@ post '/submit_one' => sub {
 
 
 get '/all' => sub {
-    template 'index', { questions => $survey->shake(QUESTION_COUNT),
+    template 'index', { questions => $survey->shake,
                         intro => $survey->{intro},
                         set_features(qw/AGAIN FINISH TITLE MISSING/)};
 };
