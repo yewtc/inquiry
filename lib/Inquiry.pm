@@ -60,10 +60,12 @@ post '/submit_one' => sub {
     if (session('current')) {
         my $results = Inquiry::Results->new(DB_FILE, request->address);
         $results->init($survey->count);
-        $results->save(params(),
+        my %answers = (params(),
                        map { $_ => session($_) }
                            grep /^(?:qa?n|r)[0-9]+-[0-9]+$/,
                            keys %{ session() });
+        $survey->check([ map $_->[0], @{ session('shaken') } ], %answers);
+        $results->save(%answers);
         session 'db_id' => $results->{id};
         forward '/opinion' if exists $survey->{opinion};
         session->destroy;
@@ -84,6 +86,7 @@ get '/submit' => sub {
     if (params()) {
         my $results = Inquiry::Results->new(DB_FILE, request->address);
         $results->init($survey->count);
+        $survey->check([ map $_->[0], @{ session('shaken') } ], params());
         $results->save(params());
         session 'db_id' => $results->{id};
         forward '/opinion' if exists $survey->{opinion};

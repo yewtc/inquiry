@@ -140,9 +140,60 @@ is_deeply($s->{THANK},           ["Thank-t\n"],           'Thank');
 is_deeply($s->{opinion}{text},   ["Whadda you think?\n"], 'Opinion');
 is_deeply($s->{opinion}{submit}, "stumbit",               'Opinion Submit');
 
-# Test real data loading
+# Test real data loading plus sanity checks
 
 $s = eval { Inquiry::Survey->new('anketa.txt') };
 is(ref $s, 'Inquiry::Survey', 'Real data loaded');
+eval { $s->check([], 'qn02-4' => 'on') };
+like($@, qr/Invalid answer /, 'Invalid answer');
+eval { $s->check([], 'qn0-1' => 'on') };
+like($@, qr/Invalid answer/, 'Q number 0');
+eval { $s->check([], 'qn7-1' => 'on') };
+like($@, qr/Invalid question number 7/, 'Q number over max');
+eval { $s->check([], 'qn1-1' => 1) };
+like($@, qr/Invalid value/, 'on');
+
+eval { $s->check([], 'rn3-2' => 1) };
+like($@, qr/r with n/, 'rn');
+eval { $s->check([], 'ra3-2' => 1) };
+like($@, qr/r with a/, 'ra');
+eval { $s->check([], 'qa3-2' => 'on') };
+like($@, qr/q without n/, 'q-n');
+
+eval { $s->check([], 'qn1-1' => 'on') };
+like($@, qr/Invalid number of answers/, 'pick');
+eval { $s->check([], 'qan1-1' => 'on') };
+like($@, qr/Wrong incompatibility/, 'incompat');
+eval { $s->check([], 'qn3-1' => 'on') };
+like($@, qr/Wrong incompatibility/, '!incompat');
+eval { $s->check([], 'qn1-1' => 'on', 'r1-1' => 2) };
+like($@, qr/Radio unexpected at 1/, 'Wrong radio');
+eval { $s->check([], 'r4-3' => 1) };
+like($@, qr/Missing option for radio at/, 'Missing opt for r');
+eval { $s->check([], 'qan4-3' => 'on') };
+like($@, qr/Missing radio for /, 'Missing r for opt');
+eval { $s->check([], 'qn1-7' => 'on') };
+like($@, qr/Invalid option /, 'Extra');
+
+eval { $s->check([], 'qn6-4' => 'on', 'r6-4' => 0) };
+like($@, qr/Invalid radio value/, 'radio 0');
+eval { $s->check([], 'qn6-4' => 'on', 'r6-4' => 3) };
+like($@, qr/Invalid radio value/, 'radio over max');
+eval { $s->check([], 'qn5-3' => 'on', 'qan5-4' => 'on') };
+like($@, qr/Incompatibility not followed/, 'alone + more');
+
+eval { $s->check([qw/6 3 5 4/],
+                 'qan3-1' => 'on',
+                 'qan4-1' => 'on',
+                 'qn6-1'  => 'on') };
+like($@, qr/Missing answer for/, 'shaken ~ results');
+
+$s->check([qw/6 3 5 4/],
+                 'qan3-1' => 'on',
+                 'qan4-1' => 'on',
+                 'qn5-1'  => 'on',
+                 'qn6-1'  => 'on');
+is(ref $s, 'Inquiry::Survey', 'checked');
+
 
 done_testing();

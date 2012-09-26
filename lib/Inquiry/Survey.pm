@@ -91,6 +91,72 @@ sub shake {
 }
 
 
+sub check {
+    my ($self, $shaken, %answers) = @_;
+    my %check;
+    for my $answer (keys %answers) {
+        my ($type, $alone, $n, $question, $option)
+            = $answer =~ /^([qr])(a?)(n?)([1-9][0-9]*)-([1-9][0-9]*)$/
+            or die "Invalid answer $answer.\n";
+
+        die "Invalid question number $question" if $question > $self->count;
+
+        if ('q' eq $type) {
+            die "Invalid value $answers{$answer}\n" unless 'on' eq $answers{$answer};
+            die "q without n at $answer\n" unless $n;
+            die "Invalid option $option at $answer\n"
+                unless $self->{questions}{$question}{normal}[$option-1];
+            die "Wrong incompatibility at $question\n"
+                if $self->{questions}{$question}{normal}[$option-1][1] xor $alone;
+
+            $check{$question}{alone}{$option} = 1 if $alone;
+            $check{$question}{option}{$option} = 1;
+
+        } else {
+            die "r with n at $answer\n" if $n;
+            die "r with a at $answer\n" if $alone;
+            die "Radio unexpected at $question\n"
+                unless exists $self->{questions}{$question}{unfold};
+            $check{$question}{radio}{$option}{$answers{$answer}} = 1;
+        }
+
+    }
+
+    for my $question (keys %check) {
+        die "Incompatibility not followed at $question\n"
+            if ref $check{$question}{alone}
+                and 1 < keys %{ $check{$question}{option} };
+
+
+        my $unfold_count = 0;
+        my @folded = map +($_//[])->[2] ? $unfold_count++ : undef,
+                         @{ $self->{questions}{$question}{normal} };
+
+        for my $option (keys %{ $check{$question}{radio} }) {
+            die "Missing option for radio at $question-$option\n"
+                unless exists $check{$question}{option}{$option};
+            my $value = ( keys %{ $check{$question}{radio}{$option} } )[0];
+            die "Invalid radio value $value for $question-$option\n"
+                if $value <= 0
+                    or
+                    $value > @{ $self->{questions}{$question}{unfold}[$folded[$option-1]] } ;
+        }
+
+        for my $option (keys %{ $check{$question}{option} }) {
+            die "Missing radio for $question-$option\n"
+                if defined $folded[$option-1]
+                    and not exists $check{$question}{radio}{$option};
+        }
+    }
+
+    for my $question (@$shaken) {
+        die "Missing answer for $question\n" unless exists $check{$question}{option};
+    }
+
+    die "Invalid number of answers\n" unless keys %check == $self->{PICK};
+}
+
+
 use constant {
     NONE     => 0,
     QUESTION => 1,
