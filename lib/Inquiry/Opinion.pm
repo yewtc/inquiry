@@ -23,7 +23,7 @@ use warnings;
 use strict;
 
 use DBI;
-
+use Inquiry::DB_Repeat;
 
 =item new
 
@@ -57,8 +57,10 @@ Saves the given $opinion under the $id.
 
 sub save {
     my ($self, $id, $opinion) = @_;
-    my $st = $self->{db}->prepare('insert into opinions values (?, ?)');
-    $st->execute($id, $opinion);
+    my $st = _repeat_until_ok( sub {
+        $self->{db}->prepare('insert into opinions values (?, ?)');
+    } );
+    _repeat_until_ok( sub { $st->execute($id, $opinion); } );
     $self->{db}->commit;
 }
 

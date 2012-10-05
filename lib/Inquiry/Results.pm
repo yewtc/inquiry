@@ -22,7 +22,7 @@ use warnings;
 use strict;
 
 use DBI;
-
+use Inquiry::DB_Repeat;
 
 =item new
 
@@ -102,13 +102,18 @@ sub save {
         }
     }
 
-    my $insert = $self->{db}->prepare('insert into answers(connection,'
-                                      . join(', ', map "q$_", keys %results)
-                                      . ') values (?, '
-                                      . join(', ', ('?') x keys %results)
-                                      . ')');
-    $insert->execute($self->{id},
-                     map join(',', sort _sort_multiple_answers @$_), values %results);
+    my $insert = _repeat_until_ok(
+        sub {
+            $self->{db}->prepare('insert into answers(connection,'
+                                 . join(', ', map "q$_", keys %results)
+                                 . ') values (?, '
+                                 . join(', ', ('?') x keys %results)
+                                 . ')')}
+                                 );
+    _repeat_until_ok(sub {
+        $insert->execute($self->{id},
+                         map join(',', sort _sort_multiple_answers @$_), values %results)
+    });
     $insert->finish;
     $self->{db}->commit;
 }
