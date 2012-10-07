@@ -173,6 +173,7 @@ sub _load {
     my $mode = NONE;
   LINE:
     while (<$IN>) {
+        s/^\x{feff}// if 1 == $.; # Ignore BOM
         next if /^\s*$/ or /^%/;
         s/„/<i>/g;
         s|“|</i>|g;
