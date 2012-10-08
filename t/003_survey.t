@@ -57,6 +57,7 @@ is($x, undef, 'No questions generated');
 
 $s = Inquiry::Survey->new('t/003-c0.txt');
 ok(exists $s->{questions}{2}{incompatible}{1}, 'Incompatibilities fixed');
+ok(! exists $s->{questions}{4}{incompatible}{5}, 'Incompat not transitive');
 
 $n = 'No unfold';
 $s = eval { Inquiry::Survey->new('t/003-fn.txt') };

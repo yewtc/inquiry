@@ -175,8 +175,8 @@ sub _load {
     while (<$IN>) {
         s/^\x{feff}// if 1 == $.; # Ignore BOM
         next if /^\s*$/ or /^%/;
-        s/„/<i>/g;
-        s|“|</i>|g;
+        s/„/<b>/g;
+        s|“|</b>|g;
 
         if (/^([0-9]+)\*([\s0-9]*)$/) {
             ($mode, $current) = $self->_question_header($1, $2, $mode);
@@ -369,9 +369,10 @@ sub debug_dump {
 
   % A comment. Comments and emtpy lines are ignored.
 
-  2*
+  2* 3
   The second question. Its incompatibility with question number 1 does not have to be repeated.
-  Text in „Czech quotes“ will be set in italics.
+  Note that questions 1 and 3 are compatible if "3*1" is not mentioned.
+  Text in „Czech quotes“ will be set in bold.
   **
     !+1. This answer is incompatible with the others (!). When checked, it displays a set of radio buttons (+).
   ...
