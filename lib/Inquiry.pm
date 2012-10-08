@@ -21,6 +21,8 @@ my $survey = Inquiry::Survey->new('anketa.txt');
 
 any [qw/get post/] => '/' => sub {
     if (not session('intro')) {
+        my $address = request()->address // 'UNKNOWN';
+        info 'Connection from ' . $address;
         session intro => 1;
         return template 'intro', {intro => $survey->{intro},
                                   set_features(qw/START TITLE/)
