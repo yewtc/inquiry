@@ -11,6 +11,8 @@
         <% qline %>
      <% END %>
 
+     <div style="margin-top:1em">
+
      <% i=1 %>
      <% FOREACH text IN q.1.normal %>
          <br><input type="checkbox"
