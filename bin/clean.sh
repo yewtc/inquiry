@@ -8,5 +8,4 @@ rm -rf "$bindir"/../{inquiry,logs,sessions}.old
 [[ -d  "$bindir"/../sessions ]] && \
     mv "$bindir"/../sessions "$bindir"/../sessions.old
 
-
 exit 0
