@@ -107,7 +107,9 @@ any [qw/post get/] => '/opinion' => sub {
 
 post '/opinion/done' => sub {
     my $op = Inquiry::Opinion->new(DB_FILE);
-    $op->save(session('db_id'), param('opinion'));
+    my $opinion = param('opinion');
+    $op->save(session('db_id'), $opinion)
+        if defined $opinion and length $opinion;
     session->destroy;
     forward '/thanks';
 };
