@@ -66,6 +66,20 @@ like($@, qr/No unfold/, "Died: $n");
 $s = eval { Inquiry::Survey->new('t/003-nq.txt') };
 like($@, qr/No questions/, 'No questions');
 
+$s = eval { Inquiry::Survey->new('t/003-nec.txt') };
+like($@, qr/Not enough compatible questions/, 'Not enough questions');
+
+my $w;
+$s = eval {
+    $SIG{__WARN__} = sub {
+        like(shift, qr/Not enough compatible questions for any/, 'warning');
+        $w = 1;
+    };
+    Inquiry::Survey->new('t/003-necw.txt', 1);
+  };
+is($w, 1, 'warning was triggered');
+is(ref $s, 'Inquiry::Survey', 'pick==max');
+
 $s = eval { Inquiry::Survey->new('t/003-nqt.txt') };
 like($@, qr/No question text in /, 'No text in question');
 

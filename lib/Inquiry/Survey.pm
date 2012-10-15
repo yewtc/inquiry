@@ -18,6 +18,7 @@ Survey
   my $sur       = Inquiry::Survey->($filename);
   my $max_num   = $sur->count;
   my $questions = $sur->shake($number);
+  $sur->check($shaken, @answers);
   print STDERR $sur->debug_dump;
 
 =head1 METHODS
@@ -26,17 +27,19 @@ Survey
 
 =item new
 
-  my $sur = Inquiry::Survey->new($filename);
+  my $sur = Inquiry::Survey->new($filename, $warnings);
 
 Creates a new Survery object, populated from the given file. See L</Syntax> for
 the format of the file.
 
+Set $warnings to true if you want to get some warnings.
+
 =cut
 
 sub new {
-    my ($class, $filename) = @_;
+    my ($class, $filename, $warn) = @_;
     die "No filename\n" unless defined $filename;
-    my $self = {};
+    my $self = {warn => $warn};
     bless $self, $class;
     $self->_load($filename);
     return $self;
@@ -90,6 +93,21 @@ sub shake {
     return \@questions;
 }
 
+
+=item check
+
+  my $shaken  = [qw/6 3 5 4/];
+  my @answers = ('qan3-1' => 'on',
+                 'qan4-1' => 'on',
+                 'qn5-1'  => 'on',
+                 'qn6-1'  => 'on');
+  $sur->check($shaken, @answers);
+);
+
+Checks that the answers are possible with the given selected
+questions. Dies if not.
+
+=cut
 
 sub check {
     my ($self, $shaken, %answers) = @_;
@@ -231,6 +249,7 @@ sub _load {
     $self->_check_completness;
     $self->_set_defaults;
     $self->_fix_incompatibility;
+    $self->_check_shakability;
 }
 
 
@@ -270,6 +289,31 @@ sub _question_header {
             if exists $self->{questions}{$current}{incompatible}{$current};
     }
     return QUESTION, $current;
+}
+
+
+sub _check_shakability {
+    my $self = shift;
+    my %group;
+    for my $question (keys %{ $self->{questions} }) {
+        $group{$question} = $question if not exists $group{$question};
+        my @incompatible
+            = keys %{ $self->{questions}{$question}{incompatible} };
+        $group{$_} = $group{$question}
+            for grep ! exists $group{$_}, @incompatible;
+        for my $incomp (map $group{$_},
+                        grep $group{$_} != $group{$question}, @incompatible) {
+            $group{$_} = $group{$question}
+                for grep $group{$_} == $incomp, keys %group;
+        }
+    }
+    my %count;
+    undef $count{$_} for values %group;
+    die "Not enough compatible questions for pick\n"
+        if keys %count < $self->{PICK};
+    warn "Not enough compatible questions for any randomness\n"
+        if $self->{warn} and keys %count == $self->{PICK};
+
 }
 
 
