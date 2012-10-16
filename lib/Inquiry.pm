@@ -125,8 +125,11 @@ get '/table' => sub {
     my $results = Inquiry::Results->new(DB_FILE);
     $results->init($survey->count);
     my $opinions = Inquiry::Opinion->new(DB_FILE);
+    my $ret = $results->retrieve;
     template 'table', { count => $survey->count,
-                        results  => [ $results->retrieve ],
+                        results  => [ map +{ $_ => $ret->{$_} },
+                                      sort { (split /-/, $a)[1] <=> (split /-/, $b)[1]  }
+                                      keys %$ret ],
                         opinions => $opinions->ids,
                       };
 };
