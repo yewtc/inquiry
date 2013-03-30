@@ -355,6 +355,8 @@ sub debug_dump {
   AGAIN*   Text to be shown on the "Start again" button. Default: Start again. If specified with no value, the button will not be shown.
   FINISH*  Text to be shown on the last submit button. Default: Finish.
   MISSING* The message shown when no answer is given. Default: Missing answer.
+  ENOUGH*  Text to be shown on the "Enough" button. Default: Enough.
+  MINIMUM* Number of questions that must be completed before the "Enough" button is displayed. Default: PICK + 1 (i.e. never display the button).
 
   1* 2
   This is the first question. It is incompatible with question number 2.
