@@ -85,6 +85,8 @@ is($s->{AGAIN},            'Start again',    'Default Again');
 is($s->{FINISH},           'Finish',         'Default Finish');
 is($s->{MISSING},          'Missing answer', 'Default Missing');
 is($s->{PICK},             4,                'Default Pick');
+is($s->{MINIMUM},          $s->{PICK} + 1,   'Default Minimum');
+is($s->{ENOUGH},           'Enough',         'Default Enough');
 is($s->{opinion}{submit},  'Submit',         'Default Opinion Submit');
 is_deeply($s->{THANK},     ['Thank you.'],   'Default Thank');
 

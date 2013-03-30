@@ -181,13 +181,15 @@ sub _load {
         if (/^([0-9]+)\*([\s0-9]*)$/) {
             ($mode, $current) = $self->_question_header($1, $2, $mode);
 
-        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH|MISSING|PICK)\*\s*(.*)/
+        } elsif (/^(TITLE|START|NEXT|AGAIN|FINISH|MISSING|PICK|ENOUGH|MINIMUM)\*\s*(.*)/
                  and $mode == NONE) {
             my ($type, $text) = ($1, $2);
             $text =~ s/'/\\'/g if 'MISSING' eq $type;
             die "Duplicate $type at $.\n" if exists $self->{$type};
-            die "PICK can only take a positive integer as its argument at $.\n"
-                if 'PICK' eq $type and $text !~ /^[1-9][0-9]*$/;
+            for my $option (qw/PICK MINIMUM/) {
+                die "$option can only take a positive integer as its argument at $.\n"
+                  if $option eq $type and $text !~ /^[1-9][0-9]*$/;
+            }
             $self->{$type} = $text;
 
         } elsif (/^THANK\*/) {
@@ -293,7 +295,8 @@ sub _check_completness {
 
 sub _set_defaults {
     my $self = shift;
-    for my $type (qw/TITLE START NEXT AGAIN FINISH MISSING PICK THANK/) {
+    # PICK must precede MINIMUM
+    for my $type (qw/TITLE START NEXT AGAIN FINISH MISSING PICK THANK ENOUGH MINIMUM/) {
         unless (exists $self->{$type}) {
             $self->{$type} = {TITLE   => 'Survey',
                               START   => 'Start',
@@ -303,6 +306,8 @@ sub _set_defaults {
                               MISSING => 'Missing answer',
                               PICK    => 4,
                               THANK   => ['Thank you.'],
+                              ENOUGH  => 'Enough',
+                              MINIMUM => ($self->{PICK} // 0) + 1,
                              }->{$type};
         }
     }
