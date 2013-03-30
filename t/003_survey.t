@@ -145,7 +145,7 @@ is_deeply($s->{opinion}{submit}, "stumbit",               'Opinion Submit');
 
 # Test real data loading plus sanity checks
 
-$s = eval { Inquiry::Survey->new('anketa.txt') };
+$s = eval { Inquiry::Survey->new('inquiry.txt') };
 is(ref $s, 'Inquiry::Survey', 'Real data loaded');
 eval { $s->check([], 'qn02-4' => 'on') };
 like($@, qr/Invalid answer /, 'Invalid answer');

@@ -9,7 +9,7 @@ use Inquiry::Results;
 use Inquiry::Opinion;
 use Dancer ':syntax';
 
-use Data::Dumper;
+use if ('development' eq config->{environment}), qw(Data::Dumper);
 
 our $VERSION = '0.4';
 
@@ -17,7 +17,7 @@ use constant {
     DB_FILE => 'inquiry.db',
 };
 
-my $survey = Inquiry::Survey->new('anketa.txt');
+my $survey = Inquiry::Survey->new('inquiry.txt');
 
 any [qw/get post/] => '/' => sub {
     if (not session('intro')) {
@@ -47,7 +47,7 @@ any [qw/get post/] => '/' => sub {
     template 'by_one', {current => session('current'),
                         shaken  => session('shaken'),
                         max     => $survey->{PICK},
-                        set_features(qw/NEXT AGAIN FINISH TITLE MISSING/),
+                        set_features(qw/NEXT AGAIN FINISH TITLE MISSING MINIMUM ENOUGH/),
                        };
 };
 
@@ -74,6 +74,11 @@ post '/submit_one' => sub {
         forward '/thanks';
     }
     send_error 'Cannot submit';
+};
+
+
+get '/enough' => sub {
+    warn 'Enough';
 };
 
 

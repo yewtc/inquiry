@@ -1,3 +1,5 @@
+MINIMUM* 1
+
 Introduction
 
   Will be shown before the survey starts.
