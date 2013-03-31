@@ -149,11 +149,19 @@ sub check {
         }
     }
 
+    my $enough = $self->{MINIMUM} < $self->{PICK};
+    my $count = 0;
     for my $question (@$shaken) {
-        die "Missing answer for $question\n" unless exists $check{$question}{option};
+        if (not exists $check{$question}{option}) {
+            die "Missing answer for $question\n" unless $enough;
+        } else {
+            $count++;
+        }
     }
 
-    die "Invalid number of answers\n" unless keys %check == $self->{PICK};
+    die "Invalid number of answers\n"
+        unless $count >= $self->{MINIMUM}
+            or $count == $self->{PICK};
 }
 
 
@@ -190,6 +198,8 @@ sub _load {
                 die "$option can only take a positive integer as its argument at $.\n"
                   if $option eq $type and $text !~ /^[1-9][0-9]*$/;
             }
+            die 'PICK must precede MINIMUM' if 'MINIMUM' eq $type and not exists $self->{PICK};
+            $text++ if 'MINIMUM' eq $type and $text == $self->{PICK};
             $self->{$type} = $text;
 
         } elsif (/^THANK\*/) {
@@ -295,7 +305,6 @@ sub _check_completness {
 
 sub _set_defaults {
     my $self = shift;
-    # PICK must precede MINIMUM
     for my $type (qw/TITLE START NEXT AGAIN FINISH MISSING PICK THANK ENOUGH MINIMUM/) {
         unless (exists $self->{$type}) {
             $self->{$type} = {TITLE   => 'Survey',
@@ -361,7 +370,7 @@ sub debug_dump {
   FINISH*  Text to be shown on the last submit button. Default: Finish.
   MISSING* The message shown when no answer is given. Default: Missing answer.
   ENOUGH*  Text to be shown on the "Enough" button. Default: Enough.
-  MINIMUM* Number of questions that must be completed before the "Enough" button is displayed. Default: PICK + 1 (i.e. never display the button).
+  MINIMUM* Number of questions that must be completed before the "Enough" button is displayed. Default: PICK + 1 (i.e. never display the button). Should be defined later than PICK.
 
   1* 2
   This is the first question. It is incompatible with question number 2.

@@ -78,7 +78,7 @@ post '/submit_one' => sub {
 
 
 get '/enough' => sub {
-    warn 'Enough';
+    forward '/submit_one', {}, { method => 'POST' };
 };
 
 
