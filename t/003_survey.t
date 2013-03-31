@@ -214,11 +214,11 @@ eval { $s->check([qw/6 3 5 4/],
                  'qn6-1'  => 'on') };
 like($@, qr/Missing answer for/, 'shaken ~ results');
 
-$s->check([qw/6 3 5 4/],
+eval { $s->check([qw/6 3 5 4/],
                  'qan3-1' => 'on',
                  'qan4-1' => 'on',
                  'qn5-1'  => 'on',
-                 'qn6-1'  => 'on');
+                 'qn6-1'  => 'on') };
 is(ref $s, 'Inquiry::Survey', 'checked');
 
 $s->{MINIMUM} = 2;
