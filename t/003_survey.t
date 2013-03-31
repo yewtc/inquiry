@@ -207,5 +207,22 @@ $s->check([qw/6 3 5 4/],
                  'qn6-1'  => 'on');
 is(ref $s, 'Inquiry::Survey', 'checked');
 
+$s->{MINIMUM} = 2;
+is(eval { $s->check([qw/6 3 5 4/],
+                    'qan4-1' => 'on',
+                    'qn6-1'  => 'on');
+      1 }, 1, 'MINIMUM matched');
+
+is(eval { $s->check([qw/6 3 5 4/],
+                    'qan4-1' => 'on',
+                    'qn5-1'  => 'on',
+                    'qn6-1'  => 'on');
+      1 }, 1, 'Over MINIMUM');
+
+eval { $s->check([qw/6 3 5 4/],
+                 'qn6-1'  => 'on') };
+like($@, qr/Invalid number of answers/, 'Under MINIMUM');
+
+
 
 done_testing();
