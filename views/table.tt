@@ -1,16 +1,18 @@
 <h1>Results</h1>
 <table border=1>
-  <tr><th>id
+  <tr><th>#
+      <th>id
     <% n = 1 %>
     <% WHILE n <= count %>
       <th><% n %>*
       <% n = n + 1 %>
     <% END %>
-<% FOREACH result IN results %>
+<% i = 1 %><% FOREACH result IN results %>
   <% FOREACH record IN result %>
   <% key = record.key %>
 
   <tr>
+    <td><% GET i %><% i = i + 1 %>
     <td>
       <% IF opinions.$key %><a target="_blank" href="opinion/show?o=<% key %>"><% END %>
       <% key %>

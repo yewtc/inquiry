@@ -112,7 +112,9 @@ any [qw/post get/] => '/opinion' => sub {
 
 post '/opinion/done' => sub {
     my $op = Inquiry::Opinion->new(DB_FILE);
-    $op->save(session('db_id'), param('opinion'));
+    my $opinion = param('opinion');
+    $op->save(session('db_id'), $opinion)
+        if defined $opinion and length $opinion;
     session->destroy;
     forward '/thanks';
 };
@@ -128,8 +130,11 @@ get '/table' => sub {
     my $results = Inquiry::Results->new(DB_FILE);
     $results->init($survey->count);
     my $opinions = Inquiry::Opinion->new(DB_FILE);
+    my $ret = $results->retrieve;
     template 'table', { count => $survey->count,
-                        results  => [ $results->retrieve ],
+                        results  => [ map +{ $_ => $ret->{$_} },
+                                      sort { (split /-/, $a)[1] <=> (split /-/, $b)[1]  }
+                                      keys %$ret ],
                         opinions => $opinions->ids,
                       };
 };
