@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Inquiry::Results;
-use Test::More;
+use Test::More tests => 2;
 
 my $file = 'test_004.db';
 
@@ -27,5 +27,3 @@ is_deeply($r->retrieve,
           'all values stored');
 
 unlink $file;
-
-done_testing();

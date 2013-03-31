@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More;
+use Test::More tests => 88;
 use Inquiry::Survey;
 
 my $n = 'Cannot run without filename';
@@ -223,6 +223,3 @@ eval { $s->check([qw/6 3 5 4/],
                  'qn6-1'  => 'on') };
 like($@, qr/Invalid number of answers/, 'Under MINIMUM');
 
-
-
-done_testing();

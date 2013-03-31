@@ -2,7 +2,7 @@ use strict;
 use warnings;
 
 use Inquiry::Opinion;
-use Test::More;
+use Test::More tests => 3;
 
 my $file = 'test_005.db';
 
@@ -19,5 +19,3 @@ is_deeply($o->retrieve, { a0 => 1, a1 => 2 }, 'ids');
 undef $o;
 
 unlink $file;
-
-done_testing();
