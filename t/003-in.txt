@@ -7,6 +7,8 @@ AGAIN* Start over-t
 FINISH* Finish-t
 MISSING* missing-t
 PICK* 1
+MINIMUM* 1
+ENOUGH* enough-t
 
 1*
 Q

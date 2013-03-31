@@ -124,6 +124,13 @@ $s = eval { Inquiry::Survey->new('t/003-p.txt') };
 like($@, qr/PICK can only take a positive integer as its argument at /,
      'PICK is PosInt');
 
+$s = eval { Inquiry::Survey->new('t/003-e1.txt') };
+like($@, qr/MINIMUM can only take a positive integer as its argument at /,
+     'MINIMUM is PosInt');
+
+$s = eval { Inquiry::Survey->new('t/003-e2.txt') };
+like($@, qr/PICK must precede MINIMUM/, 'MINIMUM follows PICK');
+
 $s = Inquiry::Survey->new('t/003-p2.txt');
 is(ref $s, 'Inquiry::Survey', 'Example loaded');
 my @q = @{ $s->shake };
@@ -139,6 +146,8 @@ is($s->{AGAIN},                  'Start over-t',          'Again');
 is($s->{FINISH},                 'Finish-t',              'Finish');
 is($s->{MISSING},                'missing-t',             'Missing');
 is($s->{PICK},                   1,                       'Pick');
+is($s->{MINIMUM},                2,                       'Minimum increments');
+is($s->{ENOUGH},                 'enough-t',              'Enough');
 is_deeply($s->{THANK},           ["Thank-t\n"],           'Thank');
 is_deeply($s->{opinion}{text},   ["Whadda you think?\n"], 'Opinion');
 is_deeply($s->{opinion}{submit}, "stumbit",               'Opinion Submit');
