@@ -45,17 +45,20 @@
 
 <p>
 
-<% IF current > vMINIMUM %>
-    <input type="button" name="enough" value="<% vENOUGH %>" onclick="window.location='/enough'">
-<% END %>
-
 
 <% IF current >= max %>
      <input type="submit" value="<% vFINISH %>">
 <% ELSE %>
      <input name="next" type="submit" value="<% vNEXT %>">
 <% END %>
+
+<% IF current > vMINIMUM %>
+    <input type="button" name="enough" value="<% vENOUGH %>" onclick="window.location='/enough'">
+<% END %>
+
 <% IF vAGAIN != '' %>
   <input type="button" name="again" value="<% vAGAIN %>" onclick="window.location='/again'">
 <% END %>
+
+
 </form>
