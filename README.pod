@@ -11,6 +11,24 @@ specified - see enclosed F<lib/Inquiry/Survey.pm>.
 
 The web interface is built upon L<Dancer>.
 
+=head1 DEPENDENCIES
+
+To install Dancer, run C<cpan Dancer> in your shell. For production,
+the L<Starman> webserver is used. Run C<cpan Starman> to install
+it. The SQLite database is used to store the results, run C<cpan
+DBD::SQLite> to install its driver and C<cpan DBI> to install the
+database interface.
+
+=head1 INSTALLATION
+
+Just clone the github repository. In F<bin/start.sh>, set up a port
+for the production service.
+
+Then populate F<inquiry.txt> with settings and questions. You can run
+C<bin/app.pl> to run a development version on C<localhost:3000>.
+
+The results can be browsed at C<URL:PORT/table>.
+
 =head1 AUTHOR
 
-(c) E. Choroba, 2012
+(c) E. Choroba, 2012 - 2013
