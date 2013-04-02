@@ -30,7 +30,7 @@ sub _repeat_until_ok {
 
 =head1 AUTHOR
 
-(c) E. Choroba, 2012
+(c) E. Choroba, 2012 - 2013
 
 =cut
 

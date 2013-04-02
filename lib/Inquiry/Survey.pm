@@ -449,7 +449,7 @@ sub debug_dump {
 
 =head1 AUTHOR
 
-(c) E. Choroba, 2012
+(c) E. Choroba, 2012 - 2013
 
 =cut
 
