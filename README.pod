@@ -14,10 +14,10 @@ The web interface is built upon L<Dancer>.
 =head1 DEPENDENCIES
 
 To install Dancer, run C<cpan Dancer> in your shell. For production,
-the L<Starman> webserver is used. Run C<cpan Starman> to install
-it. The SQLite database is used to store the results, run C<cpan
-DBD::SQLite> to install its driver and C<cpan DBI> to install the
-database interface.
+the L<Starman> webserver is used over L<Plack>. Run C<cpan Starman>
+and C<cpan Plack> to install them. The SQLite database is used to store
+the results, run C<cpan DBD::SQLite> to install its driver and C<cpan
+DBI> to install the database interface.
 
 =head1 INSTALLATION
 
