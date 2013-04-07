@@ -39,7 +39,7 @@ Unfolding example. Click on 3 to see it work.
 
 5*
 Select any combination from 1-3, or select 4.
-  „4 is not compatible with the rest.“ 
+  <*4 is not compatible with the rest.*> 
 **
 1. One.
 2. Two.
