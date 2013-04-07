@@ -41,7 +41,7 @@ sub new {
     $db->{sqlite_unicode} = 1;
     unless ($db->tables(undef, '%', 'opinions', 'TABLE')) {
         $db->do("create table opinions (connection varchar(76) primary key, opinion varchar)");
-        $db->commit;
+        _repeat_until_ok( sub { $db->commit } );
     }
     bless {db => $db}, $class;
 }
