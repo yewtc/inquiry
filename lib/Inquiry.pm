@@ -129,9 +129,12 @@ any [qw/post get/] => '/thanks' => sub {
 
 
 get '/table' => sub {
-    my $results = Inquiry::Results->new(DB_FILE);
-    $results->init($survey->count);
+    # This must go first because it might create the Opinions table if it does not yet exists.
+    # The creation is not possible after Results are constructed because they lock the DB.
     my $opinions = Inquiry::Opinion->new(DB_FILE);
+
+    my $results  = Inquiry::Results->new(DB_FILE);
+    $results->init($survey->count);
     my $ret = $results->retrieve;
     template 'table', { count => $survey->count,
                         results  => [ map +{ $_ => $ret->{$_} },
