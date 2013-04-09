@@ -1,6 +1,7 @@
 <h1><% vTITLE %></h1>
 <p>
-<form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>" onsubmit="return validate('<% vMISSING %>', 0)">
+<form method="post" action="<%IF current >= max %>submit_one<% ELSE %>/<% END %>"
+      onsubmit="return ($(this).data('validation-skip') ? true : validate('<% vMISSING %>', 0))">
 <% n = 0 %>
   <% FOREACH q IN shaken %>
   <% n=n+1 %>
@@ -47,13 +48,14 @@
 
 
 <% IF current >= max %>
-     <input type="submit" value="<% vFINISH %>">
+     <input name="finish" type="submit" value="<% vFINISH %>">
 <% ELSE %>
      <input name="next" type="submit" value="<% vNEXT %>">
 <% END %>
 
 <% IF current > vMINIMUM %>
-    <input type="button" name="enough" value="<% vENOUGH %>" onclick="window.location='/enough'">
+    <input type="submit" name="enough" value="<% vENOUGH %>"
+           onclick="$(this).parents('form').data('validation-skip',true);return true;">
 <% END %>
 
 <% IF vAGAIN != '' %>

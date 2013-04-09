@@ -44,6 +44,11 @@ any [qw/get post/] => '/' => sub {
         session $param => param($param);
     }
 
+    if (param('enough')) {
+        forward '/submit_one';
+    }
+
+
     template 'by_one', {current => session('current'),
                         shaken  => session('shaken'),
                         max     => $survey->{PICK},
@@ -62,7 +67,9 @@ post '/submit_one' => sub {
     if (session('current')) {
         my $results = Inquiry::Results->new(DB_FILE, request->address);
         $results->init($survey->count);
-        my %answers = (params(),
+        my %last = params();
+        delete @last{qw/finish enough/};
+        my %answers = (%last,
                        map { $_ => session($_) }
                            grep /^(?:qa?n|r)[0-9]+-[0-9]+$/,
                            keys %{ session() });
@@ -74,11 +81,6 @@ post '/submit_one' => sub {
         forward '/thanks';
     }
     send_error 'Cannot submit';
-};
-
-
-get '/enough' => sub {
-    forward '/submit_one', {}, { method => 'POST' };
 };
 
 
