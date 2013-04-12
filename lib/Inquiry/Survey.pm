@@ -90,7 +90,21 @@ sub shake {
     }
 
     die "Not enough questions (" . join(',', map $_->[0], @questions) . ")\n" if $used < $max;
-    return \@questions;
+    return [ map $_->[0], @questions ];
+}
+
+
+=item question
+
+  my $question = $sur->question($id);
+
+Returns the question number $id.
+
+=cut
+
+sub question {
+    my ($self, $id) = @_;
+    return $self->{questions}{$id};
 }
 
 
@@ -157,7 +171,8 @@ sub check {
             die "Invalid radio value $value for $question-$option\n"
                 if $value <= 0
                     or
-                    $value > @{ $self->{questions}{$question}{unfold}[$folded[$option-1]] } ;
+                    $value > @{ $self->{questions}{$question}{unfold}[$folded[$option-1]]
+                                  // [] } ;
         }
 
         for my $option (keys %{ $check{$question}{option} }) {

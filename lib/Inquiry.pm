@@ -48,10 +48,11 @@ any [qw/get post/] => '/' => sub {
         forward '/submit_one';
     }
 
-
-    template 'by_one', {current => session('current'),
-                        shaken  => session('shaken'),
-                        max     => $survey->{PICK},
+    my $current = session('current');
+    my $orignum = session('shaken')->[$current - 1];
+    template 'by_one', {current  => $current,
+                        question => [$orignum, $survey->question($orignum)],
+                        max      => $survey->{PICK},
                         set_features(qw/NEXT AGAIN FINISH TITLE MISSING MINIMUM ENOUGH/),
                        };
 };
@@ -73,7 +74,7 @@ post '/submit_one' => sub {
                        map { $_ => session($_) }
                            grep /^(?:qa?n|r)[0-9]+-[0-9]+$/,
                            keys %{ session() });
-        $survey->check([ map $_->[0], @{ session('shaken') } ], %answers);
+        $survey->check(session('shaken'), %answers);
         $results->save(%answers);
         session 'db_id' => $results->{id};
         forward '/opinion' if exists $survey->{opinion};

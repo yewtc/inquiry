@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 92;
+use Test::More tests => 93;
 use Inquiry::Survey;
 
 my $n = 'Cannot run without filename';
@@ -170,6 +170,14 @@ is_deeply($s->{opinion}{submit}, "stumbit",               'Opinion Submit');
 
 $s = eval { Inquiry::Survey->new('inquiry.txt') };
 is(ref $s, 'Inquiry::Survey', 'Real data loaded');
+is_deeply($s->question(1), { question     => ["Select any combination of the following answers.\n"],
+                             incompatible => { 2 => undef },
+                             normal       => [ ["1. First one.\n", q(), 0],
+                                               ["2. Second one.\n", q(), 0],
+                                               ["3. Third one.\n", q(), 0],
+                                               ["4. Last one.\n", q(), 0],
+                                             ],
+                           }, '->question');
 eval { $s->check([], 'qn02-4' => 'on') };
 like($@, qr/Invalid answer /, 'Invalid answer');
 eval { $s->check([], 'qn0-1' => 'on') };
