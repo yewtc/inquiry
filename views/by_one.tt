@@ -4,7 +4,7 @@
       onsubmit="return ($(this).data('validation-skip') ? true : validate('<% vMISSING %>', 0))">
   <% q=question %>
   <div name="p<% q.0 %>" style="padding:4pt 4pt 24pt 4pt;">
-     <b><% current %> / <% max %>: <% q.0 %> </b>
+     <b><% current %> / <% max %>: </b>
      <% FOREACH qline IN q.1.question %>
         <% qline %>
      <% END %>
