@@ -18,6 +18,7 @@ Survey
   my $sur       = Inquiry::Survey->($filename);
   my $max_num   = $sur->count;
   my $questions = $sur->shake($number);
+  my $question  = $sur->question(1);
   $sur->check($shaken, @answers);
   print STDERR $sur->debug_dump;
 
