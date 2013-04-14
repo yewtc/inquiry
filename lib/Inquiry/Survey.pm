@@ -251,7 +251,7 @@ sub _load {
             die "Cannot start answer at $.\n" if QUESTION != $mode;
             $mode = ANSWER;
 
-        } elsif (/^\s*(!?)(\+?)([0-9]+)\./) {
+        } elsif (ANSWER == $mode || UNFOLD == $mode and /^\s*(!?)(\+?)([0-9]+)\./) {
             ($mode, my $redo) = $self->_answer($1, $2, $3, $current, $mode, $IN);
             redo LINE if $redo;
 
@@ -283,10 +283,6 @@ sub _load {
 
 sub _answer {
     my ($self, $alone, $unfold, $num, $current, $mode, $IN) = @_;
-    die "Cannot put answers at $.\n"
-        if NONE == $mode
-           || QUESTION == $mode
-           and $alone || $unfold;
     s/^\s*[!+]+//;
     push @{ $self->{questions}{$current}{normal} },
         [$_, $alone, $unfold ? 1 : 0];

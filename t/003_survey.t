@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 93;
+use Test::More tests => 95;
 use Inquiry::Survey;
 
 my $n = 'Cannot run without filename';
@@ -33,11 +33,13 @@ like($@, qr/Cannot start answer/, "Died: $n");
 
 $n = 'Answer in none';
 $s = eval { Inquiry::Survey->new('t/003-an.txt') };
-like($@, qr/Cannot put answers/, "Died: $n");
+like($@, qr/No questions/, "Died: $n");
 
 $n = 'Answer in question';
 $s = eval { Inquiry::Survey->new('t/003-aq.txt') };
-like($@, qr/Cannot put answers/, "Died: $n");
+like($@, qr/No answer /, "Died: $n");
+$s = eval { Inquiry::Survey->new('t/003-aiq.txt') };
+like($@, qr/Cannot start question /, "Died again: $n");
 
 $n = 'Invalid line';
 $s = eval { Inquiry::Survey->new('t/003-i.txt') };
@@ -58,6 +60,10 @@ is($x, undef, 'No questions generated');
 $s = Inquiry::Survey->new('t/003-c0.txt');
 ok(exists $s->{questions}{2}{incompatible}{1}, 'Incompatibilities fixed');
 ok(! exists $s->{questions}{4}{incompatible}{5}, 'Incompat not transitive');
+
+$n = 'Unfold without header';
+$s = eval {Inquiry::Survey->new('t/003-u.txt') };
+like($@, qr/Invalid line/, "Died: $n");
 
 $n = 'No unfold';
 $s = eval { Inquiry::Survey->new('t/003-fn.txt') };
