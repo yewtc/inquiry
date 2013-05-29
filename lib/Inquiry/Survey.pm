@@ -15,7 +15,7 @@ Survey
 
 =head1 SYNOPSIS
 
-  my $sur       = Inquiry::Survey->($filename);
+  my $sur       = 'Inquiry::Survey'->($filename);
   my $max_num   = $sur->count;
   my $questions = $sur->shake($number);
   my $question  = $sur->question(1);
@@ -28,7 +28,7 @@ Survey
 
 =item new
 
-  my $sur = Inquiry::Survey->new($filename, $warnings);
+  my $sur = 'Inquiry::Survey'->new($filename, $warnings);
 
 Creates a new Survery object, populated from the given file. See L</Syntax> for
 the format of the file.

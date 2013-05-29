@@ -7,7 +7,7 @@ use Test::More tests => 2;
 my $file = 'test_004.db';
 
 unlink $file;
-my $r = Inquiry::Results->new($file);
+my $r = 'Inquiry::Results'->new($file);
 like(ref $r, qr/Results/, 'object returned');
 $r->init(4);
 $r->save(qw/qan1-2 on

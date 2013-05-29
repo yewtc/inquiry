@@ -6,7 +6,7 @@ Opinion
 
 =head1 SYNOPSIS
 
-  my $op = Inquiry::Opinion->new($filename);
+  my $op = 'Inquiry::Opinion'->new($filename);
   $op->save($id, $opinion);
   my $keys = $op->ids;
   my $opinions = $op->retrieve;
@@ -27,7 +27,7 @@ use Inquiry::DB_Repeat;
 
 =item new
 
-  my $op = Inqiury::Opinion->new($filename);
+  my $op = 'Inqiury::Opinion'->new($filename);
 
 Returns an Opinion object connected to a database.
 
@@ -35,9 +35,9 @@ Returns an Opinion object connected to a database.
 
 sub new {
     my ($class, $filename) = @_;
-    my $db = DBI->connect("dbi:SQLite:dbname=$filename" , q(), q(),
-                          {RaiseError => 1,
-                           AutoCommit => 0});
+    my $db = 'DBI'->connect("dbi:SQLite:dbname=$filename" , q(), q(),
+                            {RaiseError => 1,
+                             AutoCommit => 0});
     $db->{sqlite_unicode} = 1;
     unless ($db->tables(undef, '%', 'opinions', 'TABLE')) {
         $db->do("create table opinions (connection varchar(76) primary key, opinion varchar)");

@@ -17,7 +17,7 @@ use constant {
     DB_FILE => 'inquiry.db',
 };
 
-my $survey = Inquiry::Survey->new('inquiry.txt');
+my $survey = 'Inquiry::Survey'->new('inquiry.txt');
 
 any [qw/get post/] => '/' => sub {
     if (not session('intro')) {
@@ -66,7 +66,7 @@ get '/again' => sub {
 
 post '/submit_one' => sub {
     if (session('current')) {
-        my $results = Inquiry::Results->new(DB_FILE, request->address);
+        my $results = 'Inquiry::Results'->new(DB_FILE, request->address);
         $results->init($survey->count);
         my %last = params();
         delete @last{qw/finish enough/};
@@ -94,7 +94,7 @@ get '/all' => sub {
 
 get '/submit' => sub {
     if (params()) {
-        my $results = Inquiry::Results->new(DB_FILE, request->address);
+        my $results = 'Inquiry::Results'->new(DB_FILE, request->address);
         $results->init($survey->count);
         $survey->check([ map $_->[0], @{ session('shaken') } ], params());
         $results->save(params());
@@ -114,7 +114,7 @@ any [qw/post get/] => '/opinion' => sub {
 
 
 post '/opinion/done' => sub {
-    my $op = Inquiry::Opinion->new(DB_FILE);
+    my $op = 'Inquiry::Opinion'->new(DB_FILE);
     my $opinion = param('opinion');
     $op->save(session('db_id'), $opinion)
         if defined $opinion and length $opinion;
@@ -132,9 +132,9 @@ any [qw/post get/] => '/thanks' => sub {
 get '/table' => sub {
     # This must go first because it might create the Opinions table if it does not yet exists.
     # The creation is not possible after Results are constructed because they lock the DB.
-    my $opinions = Inquiry::Opinion->new(DB_FILE);
+    my $opinions = 'Inquiry::Opinion'->new(DB_FILE);
 
-    my $results  = Inquiry::Results->new(DB_FILE);
+    my $results  = 'Inquiry::Results'->new(DB_FILE);
     $results->init($survey->count);
     my $ret = $results->retrieve;
     template 'table', { count => $survey->count,
@@ -146,7 +146,7 @@ get '/table' => sub {
 };
 
 get '/opinion/show' => sub {
-    my $opinion = Inquiry::Opinion->new(DB_FILE);
+    my $opinion = 'Inquiry::Opinion'->new(DB_FILE);
     my $opinions = $opinion->retrieve;
     my $show = $opinions->{param('o')};
     $show =~ s/&/\&amp;/g;

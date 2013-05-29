@@ -6,7 +6,7 @@ Results
 
 =head1 SYNOPSIS
 
-  my $results = Inquiry::Results->new($filename, $ip);
+  my $results = 'Inquiry::Results'->new($filename, $ip);
   my $results->init($count_answers);
   my $results->save(%params);
 
@@ -26,7 +26,7 @@ use Inquiry::DB_Repeat;
 
 =item new
 
-  my $results = Inquiry::Results->new($filename, $ip);
+  my $results = 'Inquiry::Results'->new($filename, $ip);
 
 Returns a new Results object, connects to the database in
 $filename. $ip is used to generate unique id.
@@ -36,9 +36,9 @@ $filename. $ip is used to generate unique id.
 sub new {
     my ($class, $filename, $ip) = @_;
     my $self = {};
-    $self->{db} = DBI->connect("dbi:SQLite:dbname=$filename", q(), q(),
-                               {RaiseError => 1,
-                                AutoCommit => 0});
+    $self->{db} = 'DBI'->connect("dbi:SQLite:dbname=$filename", q(), q(),
+                                 {RaiseError => 1,
+                                  AutoCommit => 0});
     $self->{id} = _generate_id($ip);
     return bless $self, $class;
 }
