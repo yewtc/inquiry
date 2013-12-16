@@ -10,18 +10,20 @@ locked db.
 use warnings;
 use strict;
 
+use Time::HiRes qw{ usleep };
+
 use Exporter 'import';
-our @EXPORT = qw/_repeat_until_ok/;
+our @EXPORT = qw{ _repeat_until_ok };
 
 
 sub _repeat_until_ok {
     my $code  = shift;
     my $count = 1;
     my $val;
-    while ($count < 1e9) {
+    while ($count < 1_000) {
         last if $val = $code->();
         $count++;
-        sleep 1;
+        usleep 10;
     }
     print STDERR "_repeated: $count\n" if 1 < $count;
     return $val;

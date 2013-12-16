@@ -1,9 +1,9 @@
-* TODO enough [0/1]
+* DONE enough [1/1]
 
- - [ ] no. of submited questions == pick or > minimum
+ - [X] no. of submited questions == pick or > minimum
 
 
-* TODO add sanity checking (impossible parameters)
+* DONE add sanity checking (impossible parameters)
 
 * DONE simplify javascript
 
