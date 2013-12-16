@@ -2,6 +2,9 @@
 
 Inquiry
 
+=for HTML
+<img src="https://api.travis-ci.org/choroba/inquiry.png?branch=master">
+
 =head1 PURPOSE
 
 Perl application allowing to build web surveys. The survey is built
