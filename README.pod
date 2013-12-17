@@ -3,7 +3,7 @@
 Inquiry
 
 =for HTML
-<img src="https://api.travis-ci.org/choroba/inquiry.png?branch=master">
+<a href="https://travis-ci.org/choroba/inquiry"><img src="https://api.travis-ci.org/choroba/inquiry.png?branch=master"></a>
 
 =head1 PURPOSE
 
