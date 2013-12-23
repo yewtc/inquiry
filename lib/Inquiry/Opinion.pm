@@ -43,7 +43,7 @@ sub new {
         $db->do("create table opinions (connection varchar(76) primary key, opinion varchar)");
         $db->commit;
     }
-    bless {db => $db}, $class;
+    bless {db => $db}, $class
 }
 
 
@@ -82,7 +82,7 @@ sub ids {
     my $st = $self->{db}->prepare('select connection from opinions');
     $st->execute;
     my $data = { map { $_->[0] => 1 } @{ $st->fetchall_arrayref } };
-    return $data;
+    return $data
 }
 
 =item retrieve
@@ -103,7 +103,7 @@ sub retrieve {
     my $st = $self->{db}->prepare('select * from  opinions');
     $st->execute;
     my $data = { map {+@$_} @{ $st->fetchall_arrayref } };
-    return $data;
+    return $data
 }
 
 

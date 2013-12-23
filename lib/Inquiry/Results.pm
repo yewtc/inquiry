@@ -40,14 +40,14 @@ sub new {
                                  {RaiseError => 1,
                                   AutoCommit => 0});
     $self->{id} = _generate_id($ip);
-    return bless $self, $class;
+    return bless $self, $class
 }
 
 
 # Generates id from the IP
 sub _generate_id {
     my $ip = shift;
-    join '-', $ip // '0.0.0.0', time, rand 1e14;
+    join '-', $ip // '0.0.0.0', time, rand 1e14
 }
 
 =item init
@@ -124,7 +124,7 @@ sub _sort_multiple_answers {
     $a0 //= $a;
     my ($b0, $b1) = $b =~ /(.*):(.*)/;
     $b0 //= $b;
-    $a0 <=> $b0 or $a1 <=> $b1;
+    $a0 <=> $b0 or $a1 <=> $b1
 }
 
 
@@ -141,7 +141,7 @@ sub retrieve {
     my $self = shift;
     my $select = $self->{db}->prepare('select * from answers');
     $select->execute;
-    return { map { $_->[0] => [ @{ $_ }[1 .. $#{$_}] ] } @{ $select->fetchall_arrayref } };
+    return { map { $_->[0] => [ @{ $_ }[1 .. $#{$_}] ] } @{ $select->fetchall_arrayref } }
 }
 
 

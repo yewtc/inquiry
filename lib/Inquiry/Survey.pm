@@ -43,7 +43,7 @@ sub new {
     my $self = {warn => $warn};
     bless $self, $class;
     $self->_load($filename);
-    return $self;
+    return $self
 }
 
 
@@ -56,7 +56,7 @@ Returns the number of questions in the full survery.
 =cut
 
 sub count {
-    return scalar keys %{shift->{questions}};
+    return scalar keys %{shift->{questions}}
 }
 
 
@@ -91,7 +91,7 @@ sub shake {
     }
 
     die "Not enough questions (" . join(',', map $_->[0], @questions) . ")\n" if $used < $max;
-    return [ map $_->[0], @questions ];
+    return [ map $_->[0], @questions ]
 }
 
 
@@ -105,7 +105,7 @@ Returns the question number $id.
 
 sub question {
     my ($self, $id) = @_;
-    return $self->{questions}{$id};
+    return $self->{questions}{$id}
 }
 
 
@@ -293,13 +293,13 @@ sub _answer {
         while (<$IN>) {
             if (not /^\s*!?-(?:[0-9]+\.)?(.*)/) {
                 die "No unfold at $.\n" if $first;
-                return $mode, 1;
+                return $mode, 1
             }
             push @{ $self->{questions}{$current}{unfold}[-1] }, $1;
             undef $first;
         }
     }
-    return $mode, 0;
+    return $mode, 0
 }
 
 
@@ -312,7 +312,7 @@ sub _question_header {
         die "Impossible incompatibility at $.\n"
             if exists $self->{questions}{$current}{incompatible}{$current};
     }
-    return QUESTION, $current;
+    return QUESTION, $current
 }
 
 
@@ -406,7 +406,7 @@ Returns a dump (see Data::Dumper) of the given Survey object.
 =cut
 
 sub debug_dump {
-    return Dumper shift;
+    return Dumper shift
 }
 
 

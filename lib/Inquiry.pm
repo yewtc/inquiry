@@ -45,7 +45,7 @@ any [qw/get post/] => '/' => sub {
     }
 
     if (param('enough')) {
-        forward '/submit_one';
+        forward '/submit_one'
     }
 
     my $current = session('current');
@@ -54,13 +54,13 @@ any [qw/get post/] => '/' => sub {
                         question => [$orignum, $survey->question($orignum)],
                         max      => $survey->{PICK},
                         set_features(qw/NEXT AGAIN FINISH TITLE MISSING MINIMUM ENOUGH/),
-                       };
+                       }
 };
 
 
 get '/again' => sub {
     session->destroy;
-    forward '/';
+    forward '/'
 };
 
 
@@ -79,16 +79,16 @@ post '/submit_one' => sub {
         session 'db_id' => $results->{id};
         forward '/opinion' if exists $survey->{opinion};
         session->destroy;
-        forward '/thanks';
+        forward '/thanks'
     }
-    send_error 'Cannot submit';
+    send_error 'Cannot submit'
 };
 
 
 get '/all' => sub {
     template 'index', { questions => $survey->shake,
                         intro => $survey->{intro},
-                        set_features(qw/AGAIN FINISH TITLE MISSING/)};
+                        set_features(qw/AGAIN FINISH TITLE MISSING/)}
 };
 
 
@@ -101,15 +101,15 @@ get '/submit' => sub {
         session 'db_id' => $results->{id};
         forward '/opinion' if exists $survey->{opinion};
         session->destroy;
-        forward '/thanks';
+        forward '/thanks'
     }
-    send_error 'Cannot submit';
+    send_error 'Cannot submit'
 };
 
 
 any [qw/post get/] => '/opinion' => sub {
     template 'opinion', { opinion => $survey->{opinion},
-                          set_features(qw/TITLE/)};
+                          set_features(qw/TITLE/)}
 };
 
 
@@ -119,13 +119,13 @@ post '/opinion/done' => sub {
     $op->save(session('db_id'), $opinion)
         if defined $opinion and length $opinion;
     session->destroy;
-    forward '/thanks';
+    forward '/thanks'
 };
 
 
 any [qw/post get/] => '/thanks' => sub {
     template 'thanks', { thank => $survey->{THANK},
-                         set_features(qw/TITLE/) };
+                         set_features(qw/TITLE/) }
 };
 
 
@@ -142,7 +142,7 @@ get '/table' => sub {
                                       sort { (split /-/, $a)[1] <=> (split /-/, $b)[1]  }
                                       keys %$ret ],
                         opinions => $opinions->ids,
-                      };
+                      }
 };
 
 get '/opinion/show' => sub {
@@ -152,12 +152,13 @@ get '/opinion/show' => sub {
     $show =~ s/&/\&amp;/g;
     $show =~ s/</\&lt;/g;
     $show =~ s/\n/<br>/g;
-    return $show;
+    return $show
 };
 
 
 sub set_features {
-    return map { 'v' . $_ => $survey->{$_} } @_;
+    return map { 'v' . $_ => $survey->{$_} } @_
 }
+
 
 true;

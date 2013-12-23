@@ -26,7 +26,7 @@ sub _repeat_until_ok {
         usleep 10;
     }
     print STDERR "_repeated: $count\n" if 1 < $count;
-    return $val;
+    return $val
 }
 
 
