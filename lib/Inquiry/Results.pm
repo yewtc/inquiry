@@ -89,7 +89,7 @@ sub save {
     my $self = shift;
     my %params = @_;
     my %results;
-    for (keys %params) {
+    for (sort keys %params) {
         if    (/qa?n([0-9]+)-([0-9]+)/) { push @{ $results{$1} }, $2 }
         elsif (   /r([0-9]+)-([0-9]+)/) { push @{ $results{$1} }, "$2:$params{$_}" }
     }
