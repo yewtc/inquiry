@@ -13,7 +13,7 @@ use strict;
 use Time::HiRes qw{ usleep };
 
 use Exporter 'import';
-our @EXPORT = qw{ _repeat_until_ok };
+our @EXPORT_OK = qw{ _repeat_until_ok };
 
 
 sub _repeat_until_ok {

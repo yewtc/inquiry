@@ -22,7 +22,7 @@ use warnings;
 use strict;
 
 use DBI;
-use Inquiry::DB_Repeat;
+use Inquiry::DB_Repeat qw{ _repeat_until_ok };
 
 =item new
 

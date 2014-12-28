@@ -210,7 +210,7 @@ use constant {
 
 sub _load {
     my ($self, $filename) = @_;
-    open my $IN, '<:utf8', $filename or die $!;
+    open my $IN, '<:encoding(UTF-8)', $filename or die $!;
     my $current;
     my $mode = NONE;
   LINE:
@@ -251,7 +251,9 @@ sub _load {
             die "Cannot start answer at $.\n" if QUESTION != $mode;
             $mode = ANSWER;
 
-        } elsif (ANSWER == $mode || UNFOLD == $mode and /^\s*(!?)(\+?)([0-9]+)\./) {
+        } elsif ((ANSWER == $mode or UNFOLD == $mode)
+                 and /^\s*(!?)(\+?)([0-9]+)\./
+                ) {
             ($mode, my $redo) = $self->_answer($1, $2, $3, $current, $mode, $IN);
             redo LINE if $redo;
 
@@ -273,6 +275,7 @@ sub _load {
             die "Invalid line $.\n";
         }
     }
+    close $IN or die $!;
 
     $self->_check_completness;
     $self->_set_defaults;
