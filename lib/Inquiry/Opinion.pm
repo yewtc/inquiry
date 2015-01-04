@@ -39,10 +39,8 @@ sub new {
                             {RaiseError => 1,
                              AutoCommit => 0});
     $db->{sqlite_unicode} = 1;
-    unless ($db->tables(undef, '%', 'opinions', 'TABLE')) {
-        $db->do("create table opinions (connection varchar(76) primary key, opinion varchar)");
-        $db->commit;
-    }
+    $db->do("create table if not exists opinions (connection varchar(76) primary key, opinion varchar)");
+    $db->commit;
     bless {db => $db}, $class
 }
 
@@ -82,6 +80,7 @@ sub ids {
     my $st = $self->{db}->prepare('select connection from opinions');
     $st->execute;
     my $data = { map { $_->[0] => 1 } @{ $st->fetchall_arrayref } };
+    $self->{db}->commit;
     return $data
 }
 
@@ -103,6 +102,7 @@ sub retrieve {
     my $st = $self->{db}->prepare('select * from  opinions');
     $st->execute;
     my $data = { map {+@$_} @{ $st->fetchall_arrayref } };
+    $self->{db}->commit;
     return $data
 }
 

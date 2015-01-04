@@ -61,12 +61,10 @@ with the given number of columns (one column per question).
 
 sub init {
     my ($self, $num) = @_;
-    unless ($self->{db}->tables(undef, '%', 'answers', 'TABLE')) {
-        my $questions = join ',', map "q$_ varchar(20)", 1 .. $num;
-                                                          # 45 ip + 15 rand + 15 time
-        $self->{db}->do("create table answers (connection varchar(76) primary key, $questions)");
-        $self->{db}->commit;
-    }
+    my $questions = join ',', map "q$_ varchar(20)", 1 .. $num;
+                                                      # 45 ip + 15 rand + 15 time
+    $self->{db}->do("create table if not exists answers (connection varchar(76) primary key, $questions)");
+    $self->{db}->commit;
 }
 
 
@@ -141,7 +139,9 @@ sub retrieve {
     my $self = shift;
     my $select = $self->{db}->prepare('select * from answers');
     $select->execute;
-    return { map { $_->[0] => [ @{ $_ }[1 .. $#{$_}] ] } @{ $select->fetchall_arrayref } }
+    my $result = { map { $_->[0] => [ @{ $_ }[1 .. $#{$_}] ] } @{ $select->fetchall_arrayref } };
+    $self->{db}->commit;
+    return $result
 }
 
 
