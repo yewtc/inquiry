@@ -15,7 +15,7 @@ Survey
 
 =head1 SYNOPSIS
 
-  my $sur       = 'Inquiry::Survey'->($filename);
+  my $sur       = 'Inquiry::Survey'->new($filename);
   my $max_num   = $sur->count;
   my $questions = $sur->shake($number);
   my $question  = $sur->question(1);
