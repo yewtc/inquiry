@@ -16,7 +16,7 @@ WriteMakefile(
         'YAML'        => 0,
         'Dancer'      => 1.3097,
         'DBD::SQLite' => 0,
-        'Template::Tookkit' => 0,
+        'Template::Toolkit' => 0,
     },
     dist                => { COMPRESS => 'gzip -9f', SUFFIX => 'gz', },
     clean               => { FILES => 'Inquiry-*' },
