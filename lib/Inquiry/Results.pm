@@ -94,7 +94,8 @@ sub save {
 
     # From an answer 4,4:2 only keep 4:2
     for (keys %results) {
-        for my $radio (grep /:/, @{ $results{$_} }) {
+        my @answers = @{ $results{$_} };
+        for my $radio (grep /:/, @answers) {
             my ($radio_question) = ($radio =~ /(.*):/);
             @{ $results{$_} } = grep $_ ne $radio_question, @{ $results{$_} }
         }
