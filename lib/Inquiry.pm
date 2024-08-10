@@ -7,7 +7,7 @@ use utf8;
 use Inquiry::Survey;
 use Inquiry::Results;
 use Inquiry::Opinion;
-use Dancer ':syntax';
+use Dancer2;
 
 use if ('development' eq config->{environment}), qw(Data::Dumper);
 
