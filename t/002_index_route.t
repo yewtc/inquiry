@@ -1,10 +1,18 @@
-use Test::More tests => 2;
+use Test::More;
 use strict;
 use warnings;
 
 # the order is important
 use Inquiry;
-use Dancer2::Test;
+use Plack::Test;
+use HTTP::Request::Common;
+use_ok('Inquiry');
 
-route_exists [GET => '/'], 'a route handler is defined for /';
-response_status_is ['GET' => '/'], 200, 'response status is 200 for /';
+my $app =  Inquiry->to_app;
+
+my $test = Plack::Test->create($app);
+
+my $response = $test->request(GET '/');
+ok($response->is_success, "Can get /");
+ok($response->code == '200', "Has 200 status");
+done_testing;
